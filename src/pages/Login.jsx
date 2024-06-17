@@ -2,7 +2,7 @@ import React from 'react';
 
 const Login = () => {
   return (
-    <div>
+    <div className="bg-yellow-50">
       <h2>로그인</h2>
       <div className="bucket">
         <input placeholder="아이디" />
