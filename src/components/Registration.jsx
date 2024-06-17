@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Registration = () => {
   return (
     <div className="w-1/3 flex-col bg-slate-500 p-8">
