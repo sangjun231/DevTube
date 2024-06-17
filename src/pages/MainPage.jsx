@@ -9,7 +9,7 @@ const MainPage = () => {
   const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
   const searchVideos = async () => {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=9&q=${query}&key=${apiKey}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=9&q=${query}&key=${apiKey}`;
 
     try {
       const response = await axios.get(url);
@@ -27,11 +27,11 @@ const MainPage = () => {
       <div className="grid auto-cols-auto grid-cols-3">
         {videos.map((video) => (
           <div key={video.id.videoId}>
-            <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }}></h3>
+            {console.log(video.id)}
+            <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }} className="w-full truncate"></h3>
             {/* <p dangerouslySetInnerHTML={{ __html: video.snippet.description }}></p> */}
             <iframe
-              width="560"
-              height="315"
+              className="h-80 w-full"
               src={`https://www.youtube.com/embed/${video.id.videoId}`}
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
