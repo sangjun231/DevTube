@@ -6,10 +6,5 @@
   "singleQuote": true,
   "bracketSpacing": true,
   "trailingComma": "none",
-  "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindConfig": "./styles/tailwind.config.js",
-  "tailwindAttributes": ["myClassList"],
-  "tailwindFunctions": ["clsx"],
-  "tailwindPreserveWhitespace": true,
-  "tailwindPreserveDuplicates": true
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
