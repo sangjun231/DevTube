@@ -2,34 +2,33 @@ import React from 'react';
 
 const Registration = () => {
   return (
-    <div className="w-1/3 flex-col bg-slate-500 p-8">
-      <form>
-        <div className="flex-col items-center justify-center gap-5">
-          <div>
-            <label>
-              이메일
-              <input type="email" />
-            </label>
-          </div>
-          <div>
-            <label>
-              닉네임
-              <input type="text" />
-            </label>
-          </div>
-          <div>
-            <label>
-              비밀번호
-              <input type="password" />
-            </label>
-          </div>
+    <form className="flex w-1/3 flex-col items-center justify-center gap-12 border border-black p-12">
+      <h1 className="text-xl font-bold">회원가입</h1>
+      <div className="flex w-full flex-col items-center justify-center gap-5">
+        <div className="w-full">
+          <label>
+            이메일
+            <input className="mt-1 w-full border-b border-black p-2 outline-0" type="email" />
+          </label>
         </div>
-        <div className="flex justify-evenly bg-red-400">
-          <button className="w-5/12 bg-amber-600 p-2">완료</button>
-          <button className="w-5/12 bg-amber-600 p-2">뒤로가기</button>
+        <div className="w-full">
+          <label>
+            닉네임
+            <input className="mt-1 w-full border-b border-black p-2 outline-0" type="text" />
+          </label>
         </div>
-      </form>
-    </div>
+        <div className="w-full">
+          <label>
+            비밀번호
+            <input className="mt-1 w-full border-b border-black p-2 outline-0" type="password" />
+          </label>
+        </div>
+      </div>
+      <div className="flex w-full flex-col items-center justify-center gap-5">
+        <button className="w-full bg-purple-300 p-2">완료</button>
+        <button className="w-full border border-purple-300 p-2">뒤로가기</button>
+      </div>
+    </form>
   );
 };
 
