@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Servey = () => {
+const Survey = () => {
   return (
-    <div>Servey</div>
+    <div>Survey</div>
   )
 }
 
-export default Servey
+export default Survey
