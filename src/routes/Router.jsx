@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
 import MyPage from '../pages/MyPage';
 import Layout from '../components/Layout';
+import QuestionForm from '../components/Survey/QuestionForm';
+
 
 const Router = createBrowserRouter([
   {
@@ -15,6 +17,10 @@ const Router = createBrowserRouter([
       {
         path: '/profile',
         element: <MyPage />
+      },
+      {
+        path: '/survey',
+        element: <QuestionForm />,
       }
     ]
   }
