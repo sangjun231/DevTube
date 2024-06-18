@@ -26,7 +26,7 @@ function Footer({ children }) {
 
 function FooterItem({ to, children }) {
   return (
-    <Link to={to} className="mx-2 text-white no-underline hover:underline">
+    <Link to={to} className="mx-2 flex text-white no-underline hover:underline">
       {children}
     </Link>
   );
@@ -52,6 +52,7 @@ const Layout = () => {
       <Footer>
         <FooterItem to="#">
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
+          <p className="ml-4 flex items-center">@2024 all rights reserved DevTube</p>
         </FooterItem>
       </Footer>
     </>

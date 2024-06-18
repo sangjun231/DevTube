@@ -1,19 +1,16 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [videos, setVideos] = useState([]);
 
-  const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
-
   const searchVideos = async (e) => {
     e.preventDefault();
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=9&q=${query}&key=${apiKey}`;
 
     try {
-      const response = await axios.get(url);
-      setVideos(response.data.items);
+      const videos = await searchYouTubeVideos(query);
+      setVideos(videos);
     } catch (error) {
       console.error('Error fetching data from YouTube API:', error);
     }
@@ -22,16 +19,19 @@ const MainPage = () => {
   return (
     <div>
       <form onSubmit={searchVideos}>
-        <h1 className="flex justify-end font-bold">YouTube Video Search</h1>
-        <div className="mb-8 flex items-center justify-end">
+        <h1 className="flex justify-center font-bold">YouTube Video Search</h1>
+        <div className="mb-8 flex items-center justify-center">
           <input
-            className="w-100 box-border border-2"
+            className="mb-2 box-border rounded border-2 p-1"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search term"
           />
-          <button className="ml-4" onClick={searchVideos}>
+          <button
+            className="mb-2 ml-4 flex cursor-pointer items-center justify-center rounded border-2 bg-customPurple p-1 text-white no-underline hover:underline"
+            onClick={searchVideos}
+          >
             Search
           </button>
         </div>
@@ -40,7 +40,7 @@ const MainPage = () => {
         {videos.map((video) => (
           <div key={video.id.videoId}>
             <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }} className="w-full truncate"></h3>
-            <div className="aspect-w-16 aspect-h-9">
+            <div className="aspect-h-9 aspect-w-16">
               <iframe
                 className="h-full w-full"
                 src={`https://www.youtube.com/embed/${video.id.videoId}`}
