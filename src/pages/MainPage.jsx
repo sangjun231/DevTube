@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useVideos, useAddVideo, useDeleteVideo } from '../lib/supabase/videoAPI';
+import { useVideos, useAddVideo, useDeleteVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 
 const MainPage = () => {
