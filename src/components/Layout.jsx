@@ -36,7 +36,9 @@ const Layout = () => {
   return (
     <>
       <Navbar>
-        <NavItem to="/">HOME</NavItem>
+        <NavItem to="/">
+          <img className="size-14" src="img/12logo.png" alt="logo_image" />
+        </NavItem>
         <div className="align-center flex">
           <NavItem to="/profile">마이페이지</NavItem>
           <NavItem to="/login">로그아웃</NavItem>
@@ -48,7 +50,9 @@ const Layout = () => {
       </div>
 
       <Footer>
-        <FooterItem to="#">푸터푸터</FooterItem>
+        <FooterItem to="#">
+          <img className="size-14" src="img/12logo.png" alt="logo_image" />
+        </FooterItem>
       </Footer>
     </>
   );
