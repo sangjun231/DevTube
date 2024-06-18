@@ -1,4 +1,40 @@
+import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+
+function TopButton() {
+  const [showButton, setShowButton] = useState(false);
+  const scrollToTop = () => {
+    window.scroll({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    const handleShowButton = () => {
+      if (window.scrollY > 150) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+    console.log(window.scrollY);
+    window.addEventListener('scroll', handleShowButton);
+    return () => {
+      window.removeEventListener('scroll', handleShowButton);
+    };
+  }, []);
+
+  return (
+    showButton && (
+      <div id="scroll__container" className="z-20 mr-6 size-24 scale-75">
+        <button id="top" onClick={scrollToTop} type="button">
+          <img className="h-20 w-20" src="img/topbutton.png" alt="topbutton_img" />
+        </button>
+      </div>
+    )
+  );
+}
 
 const githubUrl = 'https://github.com/sangjun231/DevTube';
 
@@ -50,7 +86,9 @@ const Layout = () => {
       <div className="px-8 py-24">
         <Outlet />
       </div>
-
+      <div class="grid justify-items-end">
+        <TopButton />
+      </div>
       <Footer>
         <FooterItem to="#">
           <img onClick={() => window.open(githubUrl)} className="size-8" src="img/github-logo.png" alt="github-logo" />
