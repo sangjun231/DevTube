@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 
 function Navbar({ children }) {
   return (
-    <nav className="z-1000 fixed left-0 right-0 top-0 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
+    <nav className="fixed left-0 right-0 top-0 z-10 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
       {children}
     </nav>
   );
@@ -18,7 +18,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="z-1000 fixed bottom-0 left-0 right-0 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
       {children}
     </div>
   );
