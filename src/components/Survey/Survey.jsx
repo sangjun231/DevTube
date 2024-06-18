@@ -1,8 +1,11 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 const Survey = () => {
   return (
-    <div>Survey</div>
+    <>
+      <Outlet />
+    </>
   )
 }
 
