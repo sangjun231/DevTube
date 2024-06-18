@@ -54,7 +54,7 @@ const Registration = () => {
   };
 
   return (
-    <form className="flex w-1/3 flex-col items-center justify-center gap-12 bg-yellow-50 p-12">
+    <form className="bg-bgDev flex w-1/3 flex-col items-center justify-center gap-12 p-12">
       <h1 className="text-xl font-bold">회원가입</h1>
       <div className="flex w-full flex-col items-center justify-center gap-5">
         <div className="w-full">
