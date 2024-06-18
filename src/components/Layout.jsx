@@ -1,4 +1,42 @@
+import { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+
+function TopButton() {
+  const [showButton, setShowButton] = useState(false);
+  const scrollToTop = () => {
+    window.scroll({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    const handleShowButton = () => {
+      if (window.scrollY > 150) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+    console.log(window.scrollY);
+    window.addEventListener('scroll', handleShowButton);
+    return () => {
+      window.removeEventListener('scroll', handleShowButton);
+    };
+  }, []);
+
+  return (
+    showButton && (
+      <div id="scroll__container" className="z-20 mr-6 size-24 scale-75">
+        <button id="top" onClick={scrollToTop} type="button">
+          <img className="h-20 w-20" src="img/topbutton.png" alt="topbutton_img" />
+        </button>
+      </div>
+    )
+  );
+}
+
+const githubUrl = 'https://github.com/sangjun231/DevTube';
 
 function Navbar({ children }) {
   return (
@@ -18,7 +56,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
+    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -26,7 +64,7 @@ function Footer({ children }) {
 
 function FooterItem({ to, children }) {
   return (
-    <Link to={to} className="mx-2 flex text-white no-underline hover:underline">
+    <Link to={to} className="mx-2 flex items-center justify-between text-white no-underline hover:underline">
       {children}
     </Link>
   );
@@ -48,11 +86,16 @@ const Layout = () => {
       <div className="px-8 py-24">
         <Outlet />
       </div>
-
+      <div className="grid justify-items-end">
+        <TopButton />
+      </div>
       <Footer>
         <FooterItem to="#">
-          <img className="size-14" src="img/12logo.png" alt="logo_image" />
-          <p className="ml-4 flex items-center">@2024 all rights reserved DevTube</p>
+          <img onClick={() => window.open(githubUrl)} className="size-8" src="img/github-logo.png" alt="github-logo" />
+
+          <p onClick={() => window.open(githubUrl)} className="ml-4 flex items-center">
+            @2024 all rights reserved DevTube
+          </p>
         </FooterItem>
       </Footer>
     </>

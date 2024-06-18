@@ -51,7 +51,7 @@ const MainPage = () => {
             placeholder="Search term"
           />
           <button
-            className="mb-2 ml-4 flex cursor-pointer items-center justify-center rounded border-2 bg-customPurple p-1 text-white no-underline hover:underline"
+            className="bg-customPurple mb-2 ml-4 flex cursor-pointer items-center justify-center rounded border-2 p-1 text-white no-underline hover:underline"
             type="submit"
           >
             Search
