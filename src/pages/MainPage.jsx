@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
@@ -38,6 +39,7 @@ const MainPage = () => {
           </div>
         ))}
       </div>
+      <Link to='/survey'>survey</Link>
     </div>
   );
 };
