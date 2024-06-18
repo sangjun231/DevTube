@@ -21,15 +21,24 @@ const MainPage = () => {
 
   return (
     <div>
-      <h1>YouTube Video Search</h1>
       <form onSubmit={searchVideos}>
-        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search term" />
-        <button type="submit">Search</button>
+        <h1 className="flex justify-end font-bold">YouTube Video Search</h1>
+        <div className="mb-8 flex items-center justify-end">
+          <input
+            className="w-100 box-border border-2"
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search term"
+          />
+          <button className="ml-4" onClick={searchVideos}>
+            Search
+          </button>
+        </div>
       </form>
       <div className="grid grid-cols-3 gap-4">
         {videos.map((video) => (
           <div key={video.id.videoId}>
-            {console.log(video.id)}
             <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }} className="w-full truncate"></h3>
             <div className="aspect-w-16 aspect-h-9">
               <iframe
