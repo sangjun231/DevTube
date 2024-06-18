@@ -1,45 +1,44 @@
 import { useState } from 'react';
-import { useVideos, useAddVideo, useDeleteVideo } from '../lib/supabase/videoApi';
+import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
+import { ToastContainer, toast } from 'react-toastify';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
-  const { data: videos, error: fetchError, isLoading } = useVideos();
+  const [searchResults, setSearchResults] = useState([]);
   const addVideoMutation = useAddVideo();
-  const deleteVideoMutation = useDeleteVideo();
 
   const searchVideos = async (e) => {
     e.preventDefault();
     try {
       const youtubeVideos = await searchYouTubeVideos(query);
-      const videosToAdd = youtubeVideos.map((video) => ({
-        video_title: video.snippet.title,
-        video_id: video.id.videoId
-      }));
-      await addVideoMutation.mutateAsync(videosToAdd);
+      setSearchResults(
+        youtubeVideos.map((video) => ({
+          video_title: video.snippet.title,
+          video_id: video.id.videoId
+        }))
+      );
     } catch (error) {
       console.error('Error fetching data from YouTube API:', error);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleAddVideo = async (video) => {
     try {
-      await deleteVideoMutation.mutateAsync(id);
+      if (!toast.isActive('addVideoError')) {
+        toast.success('해당 영상이 저장되었습니다.', {
+          toastId: 'addVideoError'
+        });
+        addVideoMutation.mutate(video);
+      }
     } catch (error) {
-      console.error('Error deleting video:', error);
+      console.error('Error adding video:', error);
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (fetchError) {
-    return <div>Error: {fetchError.message}</div>;
-  }
-
   return (
     <div>
+      <ToastContainer className="mt-12" position="top-right" />
       <form onSubmit={searchVideos}>
         <h1 className="flex justify-center font-bold">YouTube Video Search</h1>
         <div className="mb-8 flex items-center justify-center">
@@ -51,7 +50,7 @@ const MainPage = () => {
             placeholder="Search term"
           />
           <button
-            className="bg-customPurple mb-2 ml-4 flex cursor-pointer items-center justify-center rounded border-2 p-1 text-white no-underline hover:underline"
+            className="mb-2 ml-4 flex cursor-pointer items-center justify-center rounded border-2 bg-customPurple p-1 text-white no-underline hover:underline"
             type="submit"
           >
             Search
@@ -59,8 +58,8 @@ const MainPage = () => {
         </div>
       </form>
       <div className="grid grid-cols-3 gap-4">
-        {videos.map((video) => (
-          <div key={video.id}>
+        {searchResults.map((video) => (
+          <div key={video.video_id}>
             <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
             <div className="aspect-h-9 aspect-w-16">
               <iframe
@@ -70,8 +69,8 @@ const MainPage = () => {
                 allowFullScreen
               ></iframe>
             </div>
-            <button className="mt-2 text-red-500" onClick={() => handleDelete(video.id)}>
-              Delete
+            <button className="mt-2 text-green-500" onClick={() => handleAddVideo(video)}>
+              Save
             </button>
           </div>
         ))}
