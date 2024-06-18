@@ -41,7 +41,7 @@ const Layout = () => {
         </NavItem>
         <div className="align-center flex">
           <NavItem to="/profile">마이페이지</NavItem>
-          <NavItem to="/login">로그아웃</NavItem>
+          <NavItem to="/login">로그인</NavItem>
         </div>
       </Navbar>
 

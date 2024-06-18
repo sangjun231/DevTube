@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Registration = () => {
   return (
     <div className="w-1/3 flex-col bg-slate-500 p-8">
@@ -24,7 +26,9 @@ const Registration = () => {
         </div>
         <div className="flex justify-evenly bg-red-400">
           <button className="w-5/12 bg-amber-600 p-2">완료</button>
-          <button className="w-5/12 bg-amber-600 p-2">뒤로가기</button>
+          <Link to="/login" className="w-5/12 bg-amber-600 p-2 no-underline hover:underline">
+            뒤로가기
+          </Link>
         </div>
       </form>
     </div>

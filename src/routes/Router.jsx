@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
 import MyPage from '../pages/MyPage';
 import Layout from '../components/Layout';
+import Auth from '../pages/Auth';
 import Login from '../pages/Login';
 
 const Router = createBrowserRouter([
@@ -16,6 +17,10 @@ const Router = createBrowserRouter([
       {
         path: '/profile',
         element: <MyPage />
+      },
+      {
+        path: '/auth',
+        element: <Auth />
       },
       {
         path: '/login',
