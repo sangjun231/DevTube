@@ -86,7 +86,7 @@ const Layout = () => {
       <div className="px-8 py-24">
         <Outlet />
       </div>
-      <div class="grid justify-items-end">
+      <div className="grid justify-items-end">
         <TopButton />
       </div>
       <Footer>
