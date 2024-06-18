@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import logo from '../assets/Devtube_logo.png';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase/supabase';
 
 export default function Login() {
   const [email, setEmail] = useState('');
