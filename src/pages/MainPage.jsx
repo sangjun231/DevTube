@@ -7,7 +7,8 @@ const MainPage = () => {
 
   const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-  const searchVideos = async () => {
+  const searchVideos = async (e) => {
+    e.preventDefault();
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=9&q=${query}&key=${apiKey}`;
 
     try {
@@ -21,20 +22,23 @@ const MainPage = () => {
   return (
     <div>
       <h1>YouTube Video Search</h1>
-      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search term" />
-      <button onClick={searchVideos}>Search</button>
-      <div className="grid auto-cols-auto grid-cols-3">
+      <form onSubmit={searchVideos}>
+        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search term" />
+        <button type="submit">Search</button>
+      </form>
+      <div className="grid grid-cols-3 gap-4">
         {videos.map((video) => (
           <div key={video.id.videoId}>
             {console.log(video.id)}
             <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }} className="w-full truncate"></h3>
-            {/* <p dangerouslySetInnerHTML={{ __html: video.snippet.description }}></p> */}
-            <iframe
-              className="h-80 w-full"
-              src={`https://www.youtube.com/embed/${video.id.videoId}`}
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            <div className="aspect-w-16 aspect-h-9">
+              <iframe
+                className="h-full w-full"
+                src={`https://www.youtube.com/embed/${video.id.videoId}`}
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </div>
         ))}
       </div>
