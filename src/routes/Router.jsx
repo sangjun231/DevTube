@@ -4,6 +4,7 @@ import MyPage from '../pages/MyPage';
 import Layout from '../components/Layout';
 import Auth from '../pages/Auth';
 import Login from '../pages/Login';
+import Modal from '../components/ConfirmModal';
 
 const Router = createBrowserRouter([
   {
