@@ -5,9 +5,14 @@ export default {
   theme: {
     extend: {
       colors: {
+        customPurple: '#D9B8FF',
+        customBlue: '#80CAFF',
         bgDev: '#FFFFF0'
       }
     }
   },
-  plugins: []
+  corePlugins: {
+    aspectRatio: false
+  },
+  plugins: [require('@tailwindcss/aspect-ratio')]
 };
