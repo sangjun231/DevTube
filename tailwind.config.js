@@ -7,7 +7,8 @@ export default {
       colors: {
         customPurple: '#D9B8FF',
         customBlue: '#80CAFF',
-        bgDev: '#FFFFF0'
+        bgDev: '#FFFFF0',
+        customGray: '#3d3f40'
       }
     }
   },
