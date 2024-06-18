@@ -7,7 +7,8 @@ const MainPage = () => {
 
   const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-  const searchVideos = async () => {
+  const searchVideos = async (e) => {
+    e.preventDefault();
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=9&q=${query}&key=${apiKey}`;
 
     try {
@@ -21,8 +22,10 @@ const MainPage = () => {
   return (
     <div>
       <h1>YouTube Video Search</h1>
-      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search term" />
-      <button onClick={searchVideos}>Search</button>
+      <form onSubmit={searchVideos}>
+        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search term" />
+        <button type="submit">Search</button>
+      </form>
       <div className="grid grid-cols-3 gap-4">
         {videos.map((video) => (
           <div key={video.id.videoId}>
