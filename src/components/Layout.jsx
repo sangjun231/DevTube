@@ -23,7 +23,7 @@ const Layout = () => {
         <NavItem to="/">HOME</NavItem>
         <div className="align-center flex">
           <NavItem to="/profile">마이페이지</NavItem>
-          <button>로그아웃</button>
+          <NavItem to="/login">로그인</NavItem>
         </div>
       </Navbar>
       <div className="px-8 py-24">
