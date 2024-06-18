@@ -25,7 +25,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex h-screen items-center justify-center">
       <div className="bg-bgDev flex h-96 w-1/4 flex-col items-center justify-center rounded-lg">
         <img className="w-24" src={logo} alt="로고" />
         <div className="mt-4 flex flex-col items-center justify-center">
@@ -38,14 +38,14 @@ export default function Login() {
           />
           <div className="m-4">
             <button
-              className="m-4 h-8 w-20 rounded-md border-0 bg-yellow-200 hover:underline"
+              className="m-4 h-8 w-20 rounded-md border-0 bg-yellow-200 text-slate-500 hover:underline"
               type="button"
               onClick={handleLogInClick}
             >
               로그인
             </button>
             <button
-              className="m-4 h-8 w-20 rounded-md border-0 bg-yellow-400 no-underline hover:underline"
+              className="m-4 h-8 w-20 rounded-md border-0 bg-yellow-400 text-slate-500 no-underline hover:underline"
               type="button"
               onClick={handleSignUpClick}
             >
