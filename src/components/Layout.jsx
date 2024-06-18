@@ -16,6 +16,22 @@ function NavItem({ to, children }) {
   );
 }
 
+function Footer({ children }) {
+  return (
+    <div className="z-1000 fixed bottom-0 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
+      {children}
+    </div>
+  );
+}
+
+function FooterItem({ to, children }) {
+  return (
+    <Link to={to} className="mx-2 text-white no-underline hover:underline">
+      {children}
+    </Link>
+  );
+}
+
 const Layout = () => {
   return (
     <>
@@ -23,9 +39,13 @@ const Layout = () => {
         <NavItem to="/">HOME</NavItem>
         <div className="align-center flex">
           <NavItem to="/profile">마이페이지</NavItem>
-          <button>로그아웃</button>
+          <NavItem to="/login">로그아웃</NavItem>
         </div>
       </Navbar>
+
+      <Footer>
+        <FooterItem to="#">푸터푸터</FooterItem>
+      </Footer>
       <div className="px-8 py-24">
         <Outlet />
       </div>

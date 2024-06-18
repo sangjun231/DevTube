@@ -23,18 +23,19 @@ const MainPage = () => {
       <h1>YouTube Video Search</h1>
       <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search term" />
       <button onClick={searchVideos}>Search</button>
-      <div className="grid auto-cols-auto grid-cols-3">
+      <div className="grid grid-cols-3 gap-4">
         {videos.map((video) => (
           <div key={video.id.videoId}>
             {console.log(video.id)}
             <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }} className="w-full truncate"></h3>
-            {/* <p dangerouslySetInnerHTML={{ __html: video.snippet.description }}></p> */}
-            <iframe
-              className="h-80 w-full"
-              src={`https://www.youtube.com/embed/${video.id.videoId}`}
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            <div className="aspect-w-16 aspect-h-9">
+              <iframe
+                className="h-full w-full"
+                src={`https://www.youtube.com/embed/${video.id.videoId}`}
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </div>
         ))}
       </div>
