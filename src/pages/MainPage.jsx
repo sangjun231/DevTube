@@ -7,7 +7,8 @@ const MainPage = () => {
 
   const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-  const searchVideos = async () => {
+  const searchVideos = async (e) => {
+    e.preventDefault();
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=9&q=${query}&key=${apiKey}`;
 
     try {
@@ -20,20 +21,22 @@ const MainPage = () => {
 
   return (
     <div>
-      <h1 className="flex justify-end font-bold">YouTube Video Search</h1>
-      <div className="mb-8 flex items-center justify-end">
-        <input
-          className="w-100 box-border border-2"
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search term"
-        />
-        <button className="ml-4" onClick={searchVideos}>
-          Search
-        </button>
-      </div>
-      <div className="grid grid-cols-3 gap-10">
+      <form onSubmit={searchVideos}>
+        <h1 className="flex justify-end font-bold">YouTube Video Search</h1>
+        <div className="mb-8 flex items-center justify-end">
+          <input
+            className="w-100 box-border border-2"
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search term"
+          />
+          <button className="ml-4" onClick={searchVideos}>
+            Search
+          </button>
+        </div>
+      </form>
+      <div className="grid grid-cols-3 gap-4">
         {videos.map((video) => (
           <div key={video.id.videoId}>
             <h3 dangerouslySetInnerHTML={{ __html: video.snippet.title }} className="w-full truncate"></h3>
