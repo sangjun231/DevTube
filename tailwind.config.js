@@ -3,7 +3,16 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        customPurple: '#D9B8FF',
+        customBlue: '#80CAFF',
+        bgDev: '#FFFFF0'
+      }
+    }
   },
-  plugins: []
+  corePlugins: {
+    aspectRatio: false
+  },
+  plugins: [require('@tailwindcss/aspect-ratio')]
 };

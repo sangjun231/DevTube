@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../../public/img/12logo.png'
+import logo from '../../assets/Devtube_logo.png'
 
 const AnswerSubmit = ({ onNext, answers, setStep }) => {
 

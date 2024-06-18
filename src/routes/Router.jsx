@@ -2,8 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
 import MyPage from '../pages/MyPage';
 import Layout from '../components/Layout';
+import Auth from '../pages/Auth';
+import Login from '../pages/Login';
 import QuestionForm from '../components/Survey/QuestionForm';
-
 
 const Router = createBrowserRouter([
   {
@@ -19,8 +20,16 @@ const Router = createBrowserRouter([
         element: <MyPage />
       },
       {
+        path: '/auth',
+        element: <Auth />
+      },
+      {
+        path: '/login',
+        element: <Login />
+      },
+      {
         path: '/survey',
-        element: <QuestionForm />,
+        element: <QuestionForm />
       }
     ]
   }
