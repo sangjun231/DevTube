@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 
 function Navbar({ children }) {
   return (
-    <nav className="z-1000 fixed top-0 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
+    <nav className="fixed top-0 z-10 mx-auto flex w-full items-center justify-between bg-gray-800 px-4 py-2 text-white">
       {children}
     </nav>
   );
