@@ -26,7 +26,10 @@ function TopButton() {
 
   return (
     showButton && (
-      <div id="scroll__container" className="z-20 mr-6 size-24 scale-75">
+      <div
+        id="scroll__container"
+        className="fixed bottom-16 right-8 flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-white"
+      >
         <button id="top" onClick={scrollToTop} type="button">
           <img className="h-20 w-20" src="img/topbutton.png" alt="topbutton_img" />
         </button>
@@ -55,7 +58,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
+    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -77,7 +80,9 @@ const Layout = () => {
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
-          <Link to='/survey' className='mr-3'>survey</Link>
+          <Link to="/survey" className="mr-3">
+            survey
+          </Link>
           <NavItem to="/profile">마이페이지</NavItem>
           <NavItem to="/login">로그인</NavItem>
         </div>
