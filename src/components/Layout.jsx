@@ -77,6 +77,7 @@ const Layout = () => {
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
+          <Link to='/survey' className='mr-3'>survey</Link>
           <NavItem to="/profile">마이페이지</NavItem>
           <NavItem to="/login">로그인</NavItem>
         </div>
