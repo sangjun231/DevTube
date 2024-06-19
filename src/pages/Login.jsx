@@ -14,6 +14,10 @@ export default function Login() {
       alert('아이디와 비밀번호를 모두 입력하세요.');
       return;
     }
+    if (!(passwordRef.current.value.length >= 6 && passwordRef.current.value.length <= 14)) {
+      alert('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
+      return;
+    }
 
     const { data, error } = await userLogin({ email: emailRef.current.value, password: passwordRef.current.value });
     if (error) {
