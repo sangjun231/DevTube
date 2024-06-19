@@ -28,6 +28,7 @@ const AnswerSubmit = ({ answers }) => {
         // 24.06.19
         // 임의로 alert 달았어용
         // searchYoutubeVideos 함수 import 해오고 달았음
+        // JSON.stringify(answers)로 넘겨보기
       >
         영상보러 가기
       </button>
