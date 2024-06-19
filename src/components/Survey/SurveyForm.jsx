@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,29 +14,32 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setAnswers({
-      ...answers,
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
       [name]: value
-    });
+    }));
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
- 
+
     if(!answers.isMajor || !answers.hasFrontendExperience 
       || !answers.usedReact || !answers.usedZustand) {
       alert('모든 질문에 대답해 주세요!');
       return;
     }
+    //localStorage.setItem('answers', JSON.stringify(answers));
 
+    
+    //console.log(answers);
     onNext(answers);
   };
 
- 
+  
 
   return (
-    <div className="flex h-full items-center justify-center">
-      <div className="b w-[500px] rounded-lg bg-slate-200 p-8 shadow-lg">
+    <div className="flex items-center justify-center">
+      <div className="w-[500px] rounded-lg bg-slate-200 p-8 shadow-lg">
         <h1 className="mb-4 text-left text-xl font-semibold">안녕하세요! 😊</h1>
         <p className="mb-6 text-left ">
           몇가지 간단한 질문에 답변해 주시면, <br />
@@ -53,6 +56,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="yes" 
                   onChange={onChange} 
                   className="mr-2"
+                  checked={answers.isMajor === 'yes'}
+                  required
                 />
                   예
               </label>
@@ -63,6 +68,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="no" 
                   onChange={onChange} 
                   className="mr-2" 
+                  checked={answers.isMajor === 'no'}
+                  required
                 />
                 아니요
               </label>
@@ -78,6 +85,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="yes" 
                   onChange={onChange} 
                   className="mr-2" 
+                  required
+                  checked={answers.hasFrontendExperience === 'yes'}
                   />
                   예
               </label>
@@ -87,7 +96,10 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   name="hasFrontendExperience" 
                   value="no" 
                   onChange={onChange} 
-                  className="mr-2" />
+                  className="mr-2" 
+                  required
+                  checked={answers.hasFrontendExperience === 'no'}
+                />
                 아니요
               </label>
             </div>
@@ -102,6 +114,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="yes" 
                   onChange={onChange} 
                   className="mr-2" 
+                  required
+                  checked={answers.usedReact === 'yes'}
                 />
                   예
               </label>
@@ -112,6 +126,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="no" 
                   onChange={onChange} 
                   className="mr-2" 
+                  required
+                  checked={answers.usedReact === 'no'}
                 />
                 아니요
               </label>
@@ -127,6 +143,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="yes" 
                   onChange={onChange} 
                   className="mr-2" 
+                  required
+                  checked={answers.usedZustand === 'yes'}
                 />
                 예
               </label>
@@ -137,6 +155,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
                   value="no" 
                   onChange={onChange} 
                   className="mr-2"
+                  required
+                  checked={answers.usedZustand === 'no'}
                 />
                 아니요
               </label>
