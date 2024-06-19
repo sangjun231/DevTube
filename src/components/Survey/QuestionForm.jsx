@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
-import { getUser, getUserInfoById } from '../../lib/supabase/userApi';
-//import { getUserDataApi, getUserIdApi, surveyApi } from '../../lib/supabase/surveyApi';
+import { getUser } from '../../lib/supabase/userApi';
 
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({
@@ -18,8 +17,7 @@ const QuestionForm = () => {
   });
   const [step, setStep] = useState('사전배경입력');
   const [user, setUser] = useState('');
-  const [userIdData, setUserrIdData] = useState('');
-  // const userId = '32c50ec5-7438-4735-850f-d3acf8a24190';
+  const [userIdData, setUserIdData] = useState('');
 
   const onNextSurvey = (data) => {
     setAnswers({ ...answers, ...data });
@@ -28,63 +26,55 @@ const QuestionForm = () => {
 
   const onRecommendationNext = (data) => {
     setAnswers({ ...answers, ...data });
-    setStep('답변제출');
+    setStep('답변제출');``
   };
 
 
   useEffect(() => {
     const getUserData = async () => {
       try {
-        // const getLocalData = JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'));
-        // console.log('로컬에서 유저 정보만 뽑아오기 확인',getLocalData.user.id);
-        // const getUserId = getLocalData.user.id;
-        // // const userData = getLocalData
-        // //const getUserId = await getUserIdApi(userId);
-        // console.log('userId 값 확인', getUserId);
+        const currentUser = await getUser();
+        //console.log('현재 유저', currentUser);
 
-          const currentUser = await getUser();
-          console.log(currentUser);
+        if (currentUser) {
+          setUser(currentUser);
+          const getUserId = currentUser.id;
 
-          if(currentUser) {
-            setUser(currentUser);
-            const getUserId = await getUserInfoById(currentUser.id);
-            setUserrIdData(getUserId[0].id);
-            console.log(getUserId[0].id);
-          }
+          if (getUserId) {
+            const userId = getUserId;
+            setUserIdData(userId);
+            //console.log('userIdData', userId);
 
-          if (userIdData) {
             const selection = {};
-  
-            setAnswers({
-              userId: userIdData,
-              isMajor: selection.isMajor || '',
-              hasFrontendExperience: selection.hasFrontendExperience || '',
+            setAnswers((prevAnswers) => ({
+              ...prevAnswers,
+              userId: userId,
+              isMajor: '',
+              hasFrontendExperience: '',
               usedReact: selection.usedReact || '',
               usedZustand: selection.usedZustand || '',
               level: selection.level || '',
               topics: selection.topics || []
-            });
-  
+            }));
+
             console.log('저장한 상태 데이터(QuestionForm)', {
-              userId: userIdData,
-              isMajor: selection.isMajor || '',
-              hasFrontendExperience: selection.hasFrontendExperience || '',
+              userId: userId,
+              isMajor: '',
+              hasFrontendExperience: '',
               usedReact: selection.usedReact || '',
               usedZustand: selection.usedZustand || '',
               level: selection.level || '',
               topics: selection.topics || []
             });
           }
-        } catch (e) {
+        }
+      } catch (e) {
         console.log('데이터 받아오기 오류', e.message);
       }
     };
 
-    // getData();
     getUserData();
-  }, []);
-
-  // useEffect(() => {
+  }, [setUser, setUserIdData]);
   //   const getData = async () => {
   //     try {
   //       //const userId = 'faaa3839-18ee-4064-87f4-9bdc994b4bde';
