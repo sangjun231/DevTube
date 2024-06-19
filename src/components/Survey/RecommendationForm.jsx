@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 const RecommendationForm = ({ answers, setAnswers, onNext, setStep }) => {
   // const [level, setLevel] = useState('');
   // const [topics, setTopics] = useState([]);
+  console.log('여기는 recommendation', answers);
 
   const onLevelChange = (e) => {
     const { value } = e.target;
@@ -63,7 +64,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep }) => {
     try {
       const userAnswer = await surveyApi(answers);
       console.log('제출용 answers', answers);
-      toast.success('답변이 제출되었습니다.');
+      
       localStorage.setItem('answers', JSON.stringify(answers));
   
       onNext(answers);
