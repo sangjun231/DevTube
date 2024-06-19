@@ -3,12 +3,48 @@ import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 import { ToastContainer, toast } from 'react-toastify';
 import { supabase } from '../lib/supabase/supabase';
+import { useInView } from 'react-intersection-observer';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+const ITEMS_PER_PAGE = 9;
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [user, setUser] = useState(null);
   const addVideoMutation = useAddVideo();
+
+  // const {
+  //   data: videos,
+  //   fetchNextPage,
+  //   hasNextPage,
+  //   isFetchingNextPage,
+  //   isPending,
+  //   error
+  // } = useInfiniteQuery({
+  //   queryKey: ['videos'],
+  //   initialPageParam: 1,
+  //   queryFn: async ({ pageParam }) => {
+  //     const response = await todoApi.get('/todos', {
+  //       params: { _page: pageParam, _limit: ITEMS_PER_PAGE }
+  //     });
+  //     return response.data;
+  //   },
+  //   getNextPageParam: (lastPage, allPages, lastPageParam) => {
+  //     const nextPage = lastPageParam + 1;
+  //     return lastPage.length === ITEMS_PER_PAGE ? nextPage : undefined;
+  //   },
+  //   select: ({ pages }) => pages.flat()
+  // });
+
+  // const { ref } = useInView({
+  //   threshold: 1,
+  //   onChange: (inView) => {
+  //     if (inView && hasNextPage && !isFetchingNextPage) {
+  //       fetchNextPage();
+  //     }
+  //   }
+  // });
 
   const searchVideos = async (e) => {
     e.preventDefault();
@@ -52,6 +88,19 @@ const MainPage = () => {
     fetchUser();
   }, []);
 
+  // if (isPending) {
+  //   return (
+  //     <div style={{ fontSize: 36 }}>
+  //       <p>로딩중...</p>
+  //     </div>
+  //   );
+  // }
+
+  // if (error) {
+  //   console.error(error);
+  //   return <div style={{ fontSize: 24 }}>에러가 발생했습니다: {error.message}</div>;
+  // }
+
   return (
     <div>
       <ToastContainer className="mt-12" position="top-right" />
@@ -74,22 +123,26 @@ const MainPage = () => {
         </div>
       </form>
       <div className="grid grid-cols-3 gap-4">
-        {searchResults.map((video) => (
-          <div key={video.video_id}>
-            <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
-            <div className="aspect-h-9 aspect-w-16">
-              <iframe
-                className="h-full w-full"
-                src={`https://www.youtube.com/embed/${video.video_id}`}
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+        {searchResults.map((video, idx) => {
+          const isLastItem = searchResults.length - 1 === idx;
+          return (
+            // <div key={video.video_id} ref={isLastItem ? ref : null}>
+            <div key={video.video_id}>
+              <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
+              <div className="aspect-h-9 aspect-w-16">
+                <iframe
+                  className="h-full w-full"
+                  src={`https://www.youtube.com/embed/${video.video_id}`}
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <button className="mt-2 text-green-500" onClick={() => handleAddVideo(video)}>
+                Save
+              </button>
             </div>
-            <button className="mt-2 text-green-500" onClick={() => handleAddVideo(video)}>
-              Save
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

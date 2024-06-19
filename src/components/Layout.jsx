@@ -59,7 +59,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -118,8 +118,8 @@ const Layout = () => {
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
-          <Link to="/survey" className="mr-3">
-            survey
+          <Link to="/survey" className="mr-3 rounded bg-gray-700">
+            영상 추천 받기
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
           {session ? (
