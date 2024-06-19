@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
-import { getUserIdApi, surveyApi } from '../../lib/supabase/surveyApi';
+//import { getUserDataApi, getUserIdApi, surveyApi } from '../../lib/supabase/surveyApi';
 
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({
@@ -59,11 +59,23 @@ const QuestionForm = () => {
   //   getData();
   // }, []);
 
+  // const getUserData = () => {
+  //  // console.log('로컬 저장 데이터 확인', JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token')).access_token);
+  //   const getLocalData = JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'));
+  //   console.log('로컬에서 유저 정보만 뽑아오기 확인',getLocalData.user.id);
+  //   const getUserId = getLocalData.user.id;
+  //   // const userData = getLocalData
+  // }
+  
+
   useEffect(() => {
-    const getData = async () => {
+    const getUserData = async () => {
       try {
-        const userId = 'faaa3839-18ee-4064-87f4-9bdc994b4bde';
-        const getUserId = await getUserIdApi(userId);
+        const getLocalData = JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'));
+        console.log('로컬에서 유저 정보만 뽑아오기 확인',getLocalData.user.id);
+        const getUserId = getLocalData.user.id;
+        // const userData = getLocalData
+        //const getUserId = await getUserIdApi(userId);
         console.log('userId 값 확인', getUserId);
 
         if (getUserId) {
@@ -94,8 +106,46 @@ const QuestionForm = () => {
       }
     };
 
-    getData();
+    // getData();
+    getUserData();
   }, []);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       //const userId = 'faaa3839-18ee-4064-87f4-9bdc994b4bde';
+  //       const getUserId = await getUserDataApi(userId);
+  //       console.log('userId 값 확인', getUserId);
+
+  //       if (getUserId) {
+  //         const selection = {};
+
+  //         setAnswers({
+  //           userId: getUserId,
+  //           isMajor: selection.isMajor || '',
+  //           hasFrontendExperience: selection.hasFrontendExperience || '',
+  //           usedReact: selection.usedReact || '',
+  //           usedZustand: selection.usedZustand || '',
+  //           level: selection.level || '',
+  //           topics: selection.topics || []
+  //         });
+
+  //         console.log('저장한 상태 데이터(QuestionForm)', {
+  //           userId: getUserId,
+  //           isMajor: selection.isMajor || '',
+  //           hasFrontendExperience: selection.hasFrontendExperience || '',
+  //           usedReact: selection.usedReact || '',
+  //           usedZustand: selection.usedZustand || '',
+  //           level: selection.level || '',
+  //           topics: selection.topics || []
+  //         });
+  //       }
+  //     } catch(e) {
+  //       console.log('실제 디비 데이터 받아오기 오류', e.message);
+  //     }
+  //   }
+  //   getData();
+  // }, []);
 
   return (
     <div className="mt-6 flex items-center justify-center">
