@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
+import { getUser, getUserInfoById } from '../../lib/supabase/userApi';
 //import { getUserDataApi, getUserIdApi, surveyApi } from '../../lib/supabase/surveyApi';
 
 const QuestionForm = () => {
@@ -15,8 +16,9 @@ const QuestionForm = () => {
     level: '',
     topics: []
   });
-
   const [step, setStep] = useState('사전배경입력');
+  const [user, setUser] = useState('');
+  const [userIdData, setUserrIdData] = useState('');
   // const userId = '32c50ec5-7438-4735-850f-d3acf8a24190';
 
   const onNextSurvey = (data) => {
@@ -29,79 +31,51 @@ const QuestionForm = () => {
     setStep('답변제출');
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const userId = '32c50ec5-7438-4735-850f-d3acf8a24193';
-  //       const getUserId = await getUserApi(userId);
-  //       console.log('받아온 유저 아이디 확인', userData);
-  //       setAnswers({...answers, userId : userData});
-  //       console.log('아이디 포함 저장 데이터', answers);
-  //       //if (userId) {
-  //         //const selection = user.selection || {};
-
-  //         // setAnswers({
-  //         //   userId: user.id,
-  //         //   isMajor: selection.isMajor || '',
-  //         //   hasFrontendExperience: selection.hasFrontendExperience || '',
-  //         //   usedReact: selection.usedReact || '',
-  //         //   usedZustand: selection.usedZustand || '',
-  //         //   level: selection.level || '',
-  //         //   topics: selection.topics || []
-  //         // });
-
-  //         console.log('저장한 상태 데이터', answers);
-  //      // }
-  //     } catch (e) {
-  //       console.log('데이터 받아오기 오류', e.message);
-  //     }
-  //   }
-  //   getData();
-  // }, []);
-
-  // const getUserData = () => {
-  //  // console.log('로컬 저장 데이터 확인', JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token')).access_token);
-  //   const getLocalData = JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'));
-  //   console.log('로컬에서 유저 정보만 뽑아오기 확인',getLocalData.user.id);
-  //   const getUserId = getLocalData.user.id;
-  //   // const userData = getLocalData
-  // }
-  
 
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const getLocalData = JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'));
-        console.log('로컬에서 유저 정보만 뽑아오기 확인',getLocalData.user.id);
-        const getUserId = getLocalData.user.id;
-        // const userData = getLocalData
-        //const getUserId = await getUserIdApi(userId);
-        console.log('userId 값 확인', getUserId);
+        // const getLocalData = JSON.parse(localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'));
+        // console.log('로컬에서 유저 정보만 뽑아오기 확인',getLocalData.user.id);
+        // const getUserId = getLocalData.user.id;
+        // // const userData = getLocalData
+        // //const getUserId = await getUserIdApi(userId);
+        // console.log('userId 값 확인', getUserId);
 
-        if (getUserId) {
-          const selection = {};
+          const currentUser = await getUser();
+          console.log(currentUser);
 
-          setAnswers({
-            userId: getUserId,
-            isMajor: selection.isMajor || '',
-            hasFrontendExperience: selection.hasFrontendExperience || '',
-            usedReact: selection.usedReact || '',
-            usedZustand: selection.usedZustand || '',
-            level: selection.level || '',
-            topics: selection.topics || []
-          });
+          if(currentUser) {
+            setUser(currentUser);
+            const getUserId = await getUserInfoById(currentUser.id);
+            setUserrIdData(getUserId[0].id);
+            console.log(getUserId[0].id);
+          }
 
-          console.log('저장한 상태 데이터(QuestionForm)', {
-            userId: getUserId,
-            isMajor: selection.isMajor || '',
-            hasFrontendExperience: selection.hasFrontendExperience || '',
-            usedReact: selection.usedReact || '',
-            usedZustand: selection.usedZustand || '',
-            level: selection.level || '',
-            topics: selection.topics || []
-          });
-        }
-      } catch (e) {
+          if (userIdData) {
+            const selection = {};
+  
+            setAnswers({
+              userId: userIdData,
+              isMajor: selection.isMajor || '',
+              hasFrontendExperience: selection.hasFrontendExperience || '',
+              usedReact: selection.usedReact || '',
+              usedZustand: selection.usedZustand || '',
+              level: selection.level || '',
+              topics: selection.topics || []
+            });
+  
+            console.log('저장한 상태 데이터(QuestionForm)', {
+              userId: userIdData,
+              isMajor: selection.isMajor || '',
+              hasFrontendExperience: selection.hasFrontendExperience || '',
+              usedReact: selection.usedReact || '',
+              usedZustand: selection.usedZustand || '',
+              level: selection.level || '',
+              topics: selection.topics || []
+            });
+          }
+        } catch (e) {
         console.log('데이터 받아오기 오류', e.message);
       }
     };
