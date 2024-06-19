@@ -76,7 +76,21 @@ const Layout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const loadSession = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      setSession(session);
+      if (session) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setNickname(null);
+      }
+    };
+
+    loadSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
         fetchUserProfile(session.user.id);
@@ -85,9 +99,9 @@ const Layout = () => {
       }
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
   const fetchUserProfile = async (id) => {
     const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
@@ -108,6 +122,10 @@ const Layout = () => {
       navigate('/login');
     }
   };
+
+  // useEffect(() => {
+  //   if (nickname) console.log(nickname);
+  // }, [nickname]);
   return (
     <>
       <NavBar>
