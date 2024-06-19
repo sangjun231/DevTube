@@ -37,7 +37,7 @@ export const surveyApi = async (answers) => {
   }
 };
 
-export const getUserApi = async (userId) => {
+export const getUserIdApi = async (userId) => {
   try {
     const { data, error } = await supabase.from('users').select('id').eq('id', userId);
     
