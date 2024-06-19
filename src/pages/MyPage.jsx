@@ -1,10 +1,15 @@
 import { ToastContainer, toast } from 'react-toastify';
 import { useVideos, useDeleteVideo } from '../lib/supabase/videoApi';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase/supabase';
 
 const MyPage = () => {
+  const [user, setUser] = useState(null);
   const { data: videos, error: fetchError, isLoading } = useVideos();
   const deleteVideoMutation = useDeleteVideo();
+
+  const likeVideos = videos.filter((video) => video.video_like === user?.id);
 
   const handleDelete = (id) => {
     try {
@@ -14,6 +19,17 @@ const MyPage = () => {
       console.error('Error deleting video:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -47,7 +63,7 @@ const MyPage = () => {
       <div className="mt-8">
         <h1 className="flex justify-center font-bold">Saved Videos</h1>
         <div className="grid grid-cols-3 gap-10">
-          {videos.map((video) => (
+          {likeVideos.map((video) => (
             <div key={video.id}>
               <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
               <div className="aspect-h-9 aspect-w-16">

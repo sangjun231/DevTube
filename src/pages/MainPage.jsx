@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 import { ToastContainer, toast } from 'react-toastify';
+import { supabase } from '../lib/supabase/supabase';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [user, setUser] = useState(null);
   const addVideoMutation = useAddVideo();
 
   const searchVideos = async (e) => {
@@ -24,17 +26,31 @@ const MainPage = () => {
   };
 
   const handleAddVideo = (video) => {
+    const videoLike = {
+      ...video,
+      video_like: user.id
+    };
     try {
       if (!toast.isActive('addVideo')) {
         toast.success('해당 영상이 저장되었습니다.', {
           toastId: 'addVideo'
         });
-        addVideoMutation.mutate(video);
+        addVideoMutation.mutate(videoLike);
       }
     } catch (error) {
       console.error('Error adding video:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   return (
     <div>
