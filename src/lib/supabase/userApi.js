@@ -28,11 +28,17 @@ export const userLogout = async () => {
   return { error };
 }; // 로그아웃
 
+
 export const getUser = async () => {
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-  return { data: { user } };
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      throw error;
+    }
+    return user;
+  } catch (e) {
+    console.log(e.message);
+  }
 }; // 사용자 정보 SELECT
 
 /* public schema users table api */
