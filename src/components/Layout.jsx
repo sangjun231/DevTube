@@ -18,7 +18,6 @@ function TopButton() {
         setShowButton(false);
       }
     };
-    console.log(window.scrollY);
     window.addEventListener('scroll', handleShowButton);
     return () => {
       window.removeEventListener('scroll', handleShowButton);
@@ -38,7 +37,7 @@ function TopButton() {
 
 const githubUrl = 'https://github.com/sangjun231/DevTube';
 
-function Navbar({ children }) {
+function NavBar({ children }) {
   return (
     <nav className="fixed left-0 right-0 top-0 z-10 mx-auto flex w-full items-center justify-between bg-gray-950 px-4 py-2 text-white">
       {children}
@@ -56,7 +55,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -73,7 +72,7 @@ function FooterItem({ to, children }) {
 const Layout = () => {
   return (
     <>
-      <Navbar>
+      <NavBar>
         <NavItem to="/">
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
@@ -82,7 +81,7 @@ const Layout = () => {
           <NavItem to="/profile">마이페이지</NavItem>
           <NavItem to="/login">로그인</NavItem>
         </div>
-      </Navbar>
+      </NavBar>
 
       <div className="px-8 py-24">
         <Outlet />
