@@ -116,7 +116,7 @@ const Layout = () => {
         </NavItem>
         <div className="align-center flex">
           <Link to="/survey" className="mr-3">
-            survey
+            💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
           {session ? (
