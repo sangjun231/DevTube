@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase/supabase';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);
@@ -55,7 +56,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
+    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -70,6 +71,27 @@ function FooterItem({ to, children }) {
 }
 
 const Layout = () => {
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error('로그아웃에 실패하였습니다', error);
+    else {
+      alert('로그아웃 되었습니다.');
+      navigate('/login');
+    }
+  };
   return (
     <>
       <NavBar>
@@ -77,9 +99,17 @@ const Layout = () => {
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
-          <Link to='/survey' className='mr-3'>survey</Link>
+          <Link to="/survey" className="mr-3">
+            survey
+          </Link>
           <NavItem to="/profile">마이페이지</NavItem>
-          <NavItem to="/login">로그인</NavItem>
+          {session ? (
+            <button onClick={handleLogout} className="mx-2 text-white no-underline hover:underline">
+              로그아웃
+            </button>
+          ) : (
+            <NavItem to="/login">로그인</NavItem>
+          )}
         </div>
       </NavBar>
 
