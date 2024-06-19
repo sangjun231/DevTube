@@ -1,9 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 // import logo from '../../assets/Devtube_logo.png'
 
 const AnswerSubmit = ({ onNext, answers, setStep }) => {
-
-  console.log(answers);
+  const navigate = useNavigate();
+  console.log('제출 페이지',answers);
 
   return (
     <div className='flex flex-col text-center items-center'>
@@ -18,11 +19,11 @@ const AnswerSubmit = ({ onNext, answers, setStep }) => {
       <button
         type="button"
         className="w-60 rounded-lg bg-black px-4 py-2 font-semibold text-white shadow-md mt-10"
-        onClick={onNext}
+        onClick={() => navigate('/')}
       >
         영상보러 가기
       </button>
-      <button className="mt-10 underline" onClick={() => setStep('요구사항입력')}>이전으로</button>
+      {/* <button className="mt-10 underline" onClick={() => setStep('요구사항입력')}>이전으로</button> */}
     </div>
   );
 };
