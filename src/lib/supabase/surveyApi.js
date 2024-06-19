@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+//import { createClient } from '@supabase/supabase-js';
 
 // const supabaseUrl = import.meta.env.VITE_SUPABASE_URL_MY;
 // const supabaseKey = import.meta.env.VITE_SUPABASE_KEY_MY;
@@ -50,3 +50,32 @@ export const getUserIdApi = async (userId) => {
     console.log(e.message);
   }
 };
+
+// export const getUserDataApi = async (userId) => {
+//   try {
+//     const { data, error } = await supabase.from('users').select('*').eq('id', userId);
+    
+//     if (error) {
+//       throw error;
+//     }
+//     console.log('유저 아이디 확인', data[0].id);
+//     return data[0].id;
+//   } catch (e) {
+//     console.log(e.message);
+//   }
+// };
+
+// export const getUserDataApi = async () => {
+//   try {
+//     const {
+//       data: { session },
+//       error
+//     } = await supabase.auth.getSession();
+//     if (error) throw new Error(error.message);
+
+//     console.log(session.user);
+//     return session.user;
+//   } catch (error) {
+//     throw new Error(`Get user failed: ${error.message}`);
+//   }
+// }
