@@ -9,7 +9,7 @@ const MyPage = () => {
   const { data: videos, error: fetchError, isLoading } = useVideos();
   const deleteVideoMutation = useDeleteVideo();
 
-  const likeVideos = videos.filter((video) => video.video_like === user?.id);
+  const likeVideos = videos ? videos.filter((video) => video.video_like === user?.id) : [];
 
   const handleDelete = (id) => {
     try {
