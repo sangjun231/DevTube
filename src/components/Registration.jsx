@@ -43,13 +43,8 @@ const Registration = () => {
       return;
     }
 
-    /* if (!confirm('회원가입을 완료하시겠습니까?')) return; */
-    setModalTask('회원가입을 완료하시겠습니까?');
-    const answer = await confirmToggle();
-    if (!answer) {
-      confirmToggle();
-      return;
-    }
+    if (!confirm('회원가입을 완료하시겠습니까?')) return;
+    /* setModalTask('회원가입을 완료하시겠습니까?'); */
 
     const registRes = await userRegist({ email, password });
 
@@ -73,9 +68,9 @@ const Registration = () => {
 
   return (
     <>
-      {!modal ? <Modal modalTask={modalTask} /> : null}
-      {!confirmModal ? <ConfirmModal modalTask={modalTask} /> : null}
-      <form className="bg-bgDev flex w-1/3 flex-col items-center justify-center gap-12 p-12">
+      {modal ? <Modal modalTask={modalTask} /> : null}
+      {confirmModal ? <ConfirmModal modalTask={modalTask} /> : null}
+      <form className="flex w-1/3 flex-col items-center justify-center gap-12 bg-bgDev p-12">
         <h1 className="text-xl font-bold">회원가입</h1>
         <div className="flex w-full flex-col items-center justify-center gap-5">
           <div className="w-full">

@@ -9,7 +9,8 @@ const useModalStore = create((set) => {
       });
     },
     confirmModal: false,
-    confirmToggle: () => {
+    confirmToggle: async (payload) => {
+      await payload;
       set((state) => {
         return { confirmModal: !state.modal };
       });
