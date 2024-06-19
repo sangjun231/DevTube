@@ -23,11 +23,11 @@ const MainPage = () => {
     }
   };
 
-  const handleAddVideo = async (video) => {
+  const handleAddVideo = (video) => {
     try {
-      if (!toast.isActive('addVideoError')) {
+      if (!toast.isActive('addVideo')) {
         toast.success('해당 영상이 저장되었습니다.', {
-          toastId: 'addVideoError'
+          toastId: 'addVideo'
         });
         addVideoMutation.mutate(video);
       }

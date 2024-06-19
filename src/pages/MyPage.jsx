@@ -6,7 +6,7 @@ const MyPage = () => {
   const { data: videos, error: fetchError, isLoading } = useVideos();
   const deleteVideoMutation = useDeleteVideo();
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     try {
       toast.success('해당 영상이 삭제되었습니다.');
       deleteVideoMutation.mutate(id);
