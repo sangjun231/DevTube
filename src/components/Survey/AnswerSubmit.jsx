@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 // import logo from '../../assets/Devtube_logo.png'
 
-const AnswerSubmit = ({ onNext, answers, setStep }) => {
+const AnswerSubmit = ({  answers }) => {
   const navigate = useNavigate();
   console.log('제출 페이지',answers);
 
@@ -23,7 +23,7 @@ const AnswerSubmit = ({ onNext, answers, setStep }) => {
       >
         영상보러 가기
       </button>
-      {/* <button className="mt-10 underline" onClick={() => setStep('요구사항입력')}>이전으로</button> */}
+      <button className="mt-10 underline" onClick={() => navigate(0)}>질문 답변 다시하기</button>
     </div>
   );
 };
