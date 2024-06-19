@@ -1,29 +1,39 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { searchYouTubeVideos } from '../../lib/api/youtubeAPI';
 // import logo from '../../assets/Devtube_logo.png'
 
-const AnswerSubmit = ({  answers }) => {
+const AnswerSubmit = ({ answers }) => {
   const navigate = useNavigate();
-  console.log('제출 페이지',answers);
+  console.log('제출 페이지', answers);
 
   return (
-    <div className='flex flex-col text-center items-center'>
-      <div className='flex flex-row mt-40'>
-      {/* <img src={logo} alt="DevTube_logo"className='h-full' /> */}
+    <div className="flex flex-col items-center text-center">
+      <div className="mt-40 flex flex-row">
+        {/* <img src={logo} alt="DevTube_logo"className='h-full' /> */}
         <div className="flex flex-col items-center justify-center gap-y-2">
-          <div className="text text-center font-bold mb-5 text-3xl">답변제출 완료 🙌</div>
-          <p className='text-xl'>답변이 제출되었습니다! </p>
-          <p className='text-xl'>추천 영상을 확인해보세요! </p>
+          <div className="text mb-5 text-center text-3xl font-bold">답변제출 완료 🙌</div>
+          <p className="text-xl">답변이 제출되었습니다! </p>
+          <p className="text-xl">추천 영상을 확인해보세요! </p>
         </div>
       </div>
       <button
         type="button"
-        className="w-60 rounded-lg bg-black px-4 py-2 font-semibold text-white shadow-md mt-10"
-        onClick={() => navigate('/')}
+        className="mt-10 w-60 rounded-lg bg-black px-4 py-2 font-semibold text-white shadow-md"
+        onClick={() => {
+          navigate('/');
+          alert(answers);
+          searchYouTubeVideos();
+        }}
+        // 24.06.19
+        // 임의로 alert 달았어용
+        // searchYoutubeVideos 함수 import 해오고 달았음
       >
         영상보러 가기
       </button>
-      <button className="mt-10 underline" onClick={() => navigate(0)}>질문 답변 다시하기</button>
+      <button className="mt-10 underline" onClick={() => navigate(0)}>
+        질문 답변 다시하기
+      </button>
     </div>
   );
 };
