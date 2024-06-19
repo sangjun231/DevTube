@@ -5,7 +5,8 @@ const cgi_1 = 27;
 const cgi_2 = 28;
 
 export const searchYouTubeVideos = async (query) => {
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=15&videoCategoryId=${(cgi_1, cgi_2)}&q=${query}&key=${apiKey}`;
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=6&videoCategoryId=${(cgi_1, cgi_2)}&q=${query}&key=${apiKey}`;
+  //maxResults 6으로 임의 수정 24.06.19
 
   try {
     const response = await axios.get(url);
