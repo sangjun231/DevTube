@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
-import {  getUserApi, surveyApi } from '../../lib/supabase/surveyApi';
+import { getUserIdApi, surveyApi } from '../../lib/supabase/surveyApi';
 
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({
@@ -28,7 +28,7 @@ const QuestionForm = () => {
     setAnswers({ ...answers, ...data });
     setStep('답변제출');
   };
-  
+
   // useEffect(() => {
   //   const getData = async () => {
   //     try {
@@ -62,15 +62,15 @@ const QuestionForm = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const userId = 'faaa3839-18ee-4064-87f4-9bdc994b4bde'; 
-        const userData = await getUserApi(userId);
-        console.log('userData 값 확인',userData)
-  
-        if (userData) {
+        const userId = 'faaa3839-18ee-4064-87f4-9bdc994b4bde';
+        const getUserId = await getUserIdApi(userId);
+        console.log('userId 값 확인', getUserId);
+
+        if (getUserId) {
           const selection = {};
 
           setAnswers({
-            userId: userData,
+            userId: getUserId,
             isMajor: selection.isMajor || '',
             hasFrontendExperience: selection.hasFrontendExperience || '',
             usedReact: selection.usedReact || '',
@@ -78,9 +78,9 @@ const QuestionForm = () => {
             level: selection.level || '',
             topics: selection.topics || []
           });
-  
+
           console.log('저장한 상태 데이터(QuestionForm)', {
-            userId: userData,
+            userId: getUserId,
             isMajor: selection.isMajor || '',
             hasFrontendExperience: selection.hasFrontendExperience || '',
             usedReact: selection.usedReact || '',
@@ -93,13 +93,13 @@ const QuestionForm = () => {
         console.log('데이터 받아오기 오류', e.message);
       }
     };
-  
+
     getData();
   }, []);
 
   return (
-    <div className="flex items-center justify-center mt-6">
-      {/* 상태관리로 변경 */}
+    <div className="mt-6 flex items-center justify-center">
+      {/* 상태관리로 변경 필요 ? */}
       {step === '사전배경입력' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
       {step === '요구사항입력' && (
         <RecommendationForm onNext={onRecommendationNext} setStep={setStep} answers={answers} setAnswers={setAnswers} />
