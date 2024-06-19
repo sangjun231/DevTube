@@ -64,7 +64,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep }) => {
       const userAnswer = await surveyApi(answers);
       console.log('제출용 answers', answers);
       toast.success('답변이 제출되었습니다.');
-      // localStorage.setItem('answers', JSON.stringify(answers));
+      localStorage.setItem('answers', JSON.stringify(answers));
   
       onNext(answers);
     } catch (e) {

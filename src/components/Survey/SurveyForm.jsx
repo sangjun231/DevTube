@@ -28,7 +28,7 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
       alert('모든 질문에 대답해 주세요!');
       return;
     }
-    //localStorage.setItem('answers', JSON.stringify(answers));
+    localStorage.setItem('answers', JSON.stringify(answers));
 
     
     //console.log(answers);
