@@ -114,7 +114,6 @@ const MyPage = () => {
             </div>
           ))}
         </div>
-      </div>
     </>
   );
 };
