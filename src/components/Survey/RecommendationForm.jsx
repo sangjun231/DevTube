@@ -80,7 +80,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
       <div className="mt-1 flex flex-col items-center justify-center">
         <div className="w-[550px] rounded-lg bg-slate-200 p-8 shadow-lg">
           <h1 className="mb-4 text-left text-xl font-semibold">마지막 질문이에요! 😊</h1>
-          <p className="mb-6 text-left">관심사에 따른 영상을 추천해 드릴게요!</p>
+          <p className="mb-6 text-left">관심사에 따른 영상을 추천해드릴게요!</p>
           <form onSubmit={onSubmitSurvey}>
             <div className="mb-6 flex flex-col rounded-2xl border-2 border-solid border-gray-400 p-4">
               <label className="mb-2 block text-lg font-medium">관심 있는 기술 스택을 골라주세요</label>

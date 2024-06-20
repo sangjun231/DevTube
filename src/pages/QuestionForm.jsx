@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import SurveyForm from './SurveyForm';
-import RecommendationForm from './RecommendationForm';
-import AnswerSubmit from './AnswerSubmit';
+import SurveyForm from '../components/Survey/SurveyForm';
+import RecommendationForm from '../components/Survey/RecommendationForm';
+import AnswerSubmit from '../components/Survey/AnswerSubmit';
 import { useQuery } from '@tanstack/react-query';
-import { getAuthSession, getAuthUser, userLogout } from '../../lib/supabase/userApi';
+import { getAuthSession, getAuthUser, userLogout } from '../lib/supabase/userApi';
 import { useNavigate } from 'react-router-dom';
-import useIsLoginStore from '../../zustand/isLoginStore';
+import useIsLoginStore from '../zustand/isLoginStore';
 
 const QuestionForm = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const QuestionForm = () => {
   }, []);
 
   if (isError) {
-    return <div>`유저의 정보를 불러 올 수 없습니다.${error}`</div>;
+    return <div>`유저의 정보를 불러올 수 없습니다.${error}`</div>;
   }
 
   const onNextSurvey = (data) => {
