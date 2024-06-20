@@ -10,8 +10,13 @@ const MainPage = () => {
   const [pageToken, setPageToken] = useState('');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pageToken, setPageToken] = useState('');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const addVideoMutation = useAddVideo();
 
+  const searchVideos = async (query, pageToken = '', reset = false) => {
+    setLoading(true);
   const searchVideos = async (query, pageToken = '', reset = false) => {
     setLoading(true);
     try {
@@ -29,11 +34,32 @@ const MainPage = () => {
                 video_id: video.id.videoId
               }))
             ]
+      const youtubeVideos = await searchYouTubeVideos(query, pageToken);
+      setSearchResults((prevResults) =>
+        reset
+          ? youtubeVideos.items.map((video) => ({
+              video_title: video.snippet.title,
+              video_id: video.id.videoId
+            }))
+          : [
+              ...prevResults,
+              ...youtubeVideos.items.map((video) => ({
+                video_title: video.snippet.title,
+                video_id: video.id.videoId
+              }))
+            ]
       );
+      setPageToken(youtubeVideos.nextPageToken || '');
       setPageToken(youtubeVideos.nextPageToken || '');
     } catch (error) {
       console.error('Error fetching data from YouTube API:', error);
     }
+    setLoading(false);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    searchVideos(query, '', true);
     setLoading(false);
   };
 
@@ -50,7 +76,7 @@ const MainPage = () => {
 
     const videoLike = {
       ...video,
-      video_like: id
+      video_like: user.id
     };
     try {
       if (!toast.isActive('addVideo')) {
@@ -74,7 +100,16 @@ const MainPage = () => {
           toast.error('로그인이 필요합니다.');
           return;
         }
+        if (!user) {
+          toast.error('로그인이 필요합니다.');
+          return;
+        }
         const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
+        if (error || !data) {
+          toast.error('설문조사를 완료해야 합니다.');
+          return;
+        }
+
         if (error || !data) {
           toast.error('설문조사를 완료해야 합니다.');
           return;
@@ -82,7 +117,13 @@ const MainPage = () => {
 
         const selectionQuery = `${data.selection.level} ${data.selection.topics.join('|')}`;
         setUser({ ...user, selection: data.selection });
+        setUser({ ...user, selection: data.selection });
         setQuery(selectionQuery);
+        searchVideos(selectionQuery, '', true); // Reset results and search
+      } catch (error) {
+        console.error('Error in fetchUserAndSelection:', error);
+        toast.error('사용자 정보를 가져오는 중 오류가 발생했습니다.');
+      }
         searchVideos(selectionQuery, '', true); // Reset results and search
       } catch (error) {
         console.error('Error in fetchUserAndSelection:', error);
