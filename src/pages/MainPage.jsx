@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 import { ToastContainer, toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import { selectEqUser, userLogout } from '../lib/supabase/userApi';
-import useIdStore from '../zustand/idStore';
+import useIdStore from '../zustand/isLoginStore';
 import { useNavigate } from 'react-router-dom';
 import useModalStore from '../zustand/modalStore';
 import Modal from '../components/Modal';
@@ -15,29 +15,6 @@ const MainPage = () => {
   const addVideoMutation = useAddVideo();
   const [modalTask, setModalTask] = useState('');
   const { modal, toggle } = useModalStore((state) => state);
-  const { id } = useIdStore((state) => state);
-  const navigate = useNavigate();
-
-  const { data: publicUser, isError } = useQuery({
-    queryKey: ['publicUser', id],
-    queryFn: () => selectEqUser(id)
-  });
-
-  if (isError) {
-    userLogout();
-    navigate('/login');
-    return;
-  }
-
-  if (!publicUser) {
-    navigate('/login');
-    return;
-  }
-
-  if (publicUser[0]?.selection) {
-    alert('설문을 완료하지 않아 추천할 수 있는 영상이 없습니다. \n 설문 페이지로 이동합니다.');
-    navigate('/survey');
-  }
 
   const searchVideos = async (e) => {
     e.preventDefault();

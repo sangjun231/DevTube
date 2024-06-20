@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
-import { getUser } from '../../lib/supabase/userApi';
+import { getAuthUser } from '../../lib/supabase/userApi';
 import userDataStore from '../../zustand/usreDataStore';
 
 const QuestionForm = () => {
@@ -30,8 +30,8 @@ const QuestionForm = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const userData = await getUser();
-        setUser(userData)
+        const userData = await getAuthUser();
+        setUser(userData);
         setUserIdData(userData.id);
         console.log('userId 값 확인', userData.id);
 
@@ -39,14 +39,14 @@ const QuestionForm = () => {
           const selection = {};
 
           setAnswers({
-            userId:  userData.id,
+            userId: userData.id,
             isMajor: selection.isMajor || '',
             level: selection.level || '',
             topics: selection.topics || []
           });
 
           console.log('저장한 상태 데이터(QuestionForm)', {
-            userId:  userData.id,
+            userId: userData.id,
             isMajor: selection.isMajor || '',
             level: selection.level || '',
             topics: selection.topics || []

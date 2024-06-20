@@ -1,13 +1,15 @@
 import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { addUser, userRegist } from '../lib/supabase/userApi';
+import { addUser, userLogin, userRegist } from '../lib/supabase/userApi';
 import useModalStore from '../zustand/modalStore';
 import Modal from './Modal';
+import useIsLoginStore from '../zustand/isLoginStore';
 
 const Registration = () => {
   const { modal, toggle } = useModalStore((state) => state);
   const navigate = useNavigate();
   const [modalTask, setModalTask] = useState('');
+  const { setIsLogin } = useIsLoginStore((state) => state);
   const email = useRef('');
   const nickname = useRef('');
   const password = useRef('');
@@ -42,7 +44,6 @@ const Registration = () => {
     }
 
     if (!confirm('회원가입을 완료하시겠습니까?')) return;
-    /* setModalTask('회원가입을 완료하시겠습니까?'); */
 
     const registRes = await userRegist({ email, password });
 
@@ -52,21 +53,28 @@ const Registration = () => {
       return;
     }
 
-    await addUser({
+    const addUserRes = await addUser({
       id: registRes?.data.user.id,
       email,
       nickname
     });
 
-    toggle();
-    setModalTask('회원가입이 완료되었습니다. 영상 추천을 위한 설문 페이지로 이동합니다.');
+    if (addUserRes.error) {
+      toggle();
+      setModalTask('회원가입 절차에 문제가 발생했습니다. 다시 시도하세요');
+      return;
+    }
+
+    await userLogin({ email, password });
+    setIsLogin(true);
     navigate('/survey');
+    return;
   };
 
   return (
     <>
       {modal ? <Modal modalTask={modalTask} /> : null}
-      <form className="flex w-1/3 flex-col items-center justify-center gap-12 bg-bgDev p-12">
+      <form className="flex min-w-96 flex-col items-center justify-center gap-12 bg-bgDev p-12">
         <h1 className="text-xl font-bold">회원가입</h1>
         <div className="flex w-full flex-col items-center justify-center gap-5">
           <div className="w-full">

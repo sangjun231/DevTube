@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/supabase';
-import { userLogout } from '../lib/supabase/userApi';
+import { getAuthSession, getAuthUser, selectEqUser, userLogout } from '../lib/supabase/userApi';
 import Modal from './Modal';
 import useModalStore from '../zustand/modalStore';
+import { useQuery } from '@tanstack/react-query';
+import useIsLoginStore from '../zustand/isLoginStore';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);
@@ -74,86 +76,85 @@ function FooterItem({ to, children }) {
 }
 
 const Layout = () => {
-  const [session, setSession] = useState(null);
+  const [id, setId] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [modalTask, setModalTask] = useState('');
   const navigate = useNavigate();
   const { modal, toggle } = useModalStore((state) => state);
+  const { setIsLogin } = useIsLoginStore((state) => state);
 
-  useEffect(() => {
-    const loadSession = async () => {
-      const {
-        data: { session }
-      } = await supabase.auth.getSession();
-      setSession(session);
-      if (session) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setNickname(null);
-      }
-    };
-
-    loadSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        console.log(session);
-        fetchUserProfile(session.user.id);
-      } else {
-        alert('세션이 존재하지 않습니다. 로그인 페이지로 이동합니다.');
-        setNickname(null);
-        userLogout();
+  const showNickname = async () => {
+    const { data } = await getAuthSession();
+    if (!data.session) {
+      setIsLogin(false);
+      await userLogout();
+      navigate('/login');
+      return;
+    }
+    /* 세션 존재 여부 검사 ,  */
+    /* if (authUser === null) {
+      setIsLogin(false);
+      await userLogout();
+      navigate('/login');
+      return;
+    } */
+    if (authUser) {
+      const { data, error } = await selectEqUser(authUser?.id);
+      if (error) {
+        setIsLogin(false);
+        await userLogout();
         navigate('/login');
+        return;
+      } else if (data.selection === null) {
+        navigate('/survey');
       }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
-
-  const fetchUserProfile = async (id) => {
-    const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
-
-    if (error) {
-      console.error('닉네임 정보를 받아올 수 없습니다', error);
-    } else {
+      setId(authUser.id);
       setNickname(data.nickname);
+      return;
     }
   };
 
-  const handleLogout = async () => {
-    const { error } = await userLogout();
-    if (error) console.error('로그아웃에 실패하였습니다', error);
+  const { data: authUser, isError } = useQuery({
+    queryKey: ['authUser'],
+    queryFn: getAuthUser
+  });
+
+  if (isError) {
+    setIsLogin(false);
+    userLogout();
     navigate('/login');
+    return;
+  }
+
+  useEffect(() => {
+    showNickname();
+  }, [authUser]);
+
+  const handleLogout = async () => {
+    setIsLogin(false);
+    await userLogout();
+    navigate('/login');
+    return;
   };
 
-  // useEffect(() => {
-  //   if (nickname) console.log(nickname);
-  // }, [nickname]);
   return (
     <>
       {modal ? <Modal modalTask={modalTask} /> : null}
       <NavBar>
-        <NavItem to="/">
+        <NavItem to={() => {}}>
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
+          <span className="mx-2 flex items-center text-white">
+            {nickname ? `${nickname}님 반갑습니다` : 'Loading...'}
+          </span>
           <Link to="/survey" className="mr-3">
             💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
-          {session ? (
-            <span className="mx-2 flex items-center text-white">
-              {nickname ? `${nickname}님 반갑습니다` : 'Loading...'}
-              <button onClick={handleLogout} className="mx-2 border text-white no-underline hover:underline">
-                로그아웃
-              </button>
-            </span>
-          ) : (
-            <NavItem to="/login">로그인</NavItem>
-          )}
+          <button onClick={handleLogout} className="mx-2 border text-white no-underline hover:underline">
+            로그아웃
+          </button>
         </div>
       </NavBar>
 

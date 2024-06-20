@@ -18,12 +18,12 @@ const Router = createBrowserRouter([
       {
         path: '/profile',
         element: <MyPage />
-      },
-      {
-        path: '/survey',
-        element: <QuestionForm />
       }
     ]
+  },
+  {
+    path: '/survey',
+    element: <QuestionForm />
   },
   {
     path: '/login',
