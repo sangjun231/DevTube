@@ -68,25 +68,16 @@ const MyPage = () => {
 
   return (
     <>
-      <ToastContainer className="mt-12" position="top-right" />
-      <div className="mb-20 flex w-full flex-col gap-8">
-        <h1 className="font-['DungGeunMo'] text-4xl font-bold">닉네임 변경</h1>
-        <div className="flex gap-5">
-          <input
-            className="min-w-72 border-2 border-black p-2 outline-none"
-            type="text"
-            placeholder="닉네임을 입력해주세요"
-            value={nickname}
-            ref={nicknameInput}
-            onChange={(e) => {
-              setNickname(e.target.value);
-            }}
-          />
-          <button
-            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
-            onClick={() => updateNickname(nickname, id)}
-          >
-            완료
+      <ToastContainer className="mt-12" position="top-right" autoClose='800' hideProgressBar='true'/>
+      {/* <div className="rounded-md2 mx-auto my-0 max-w-sm bg-slate-100 p-4">
+        <h2 className="mb-4">프로필 수정</h2>
+        <div className="mb-4">
+          <label className="mb-2 block">닉네임</label>
+          <input className="box-border w-full p-2" type="text" placeholder="nickname" />
+        </div>
+        <div className="flex gap-20">
+          <button className="mb-2 flex w-full cursor-pointer items-center justify-center rounded border-none bg-customBlue p-2 text-white no-underline hover:underline">
+            프로필 업데이트
           </button>
           <button
             className="border-2 border-red-500 bg-red-300 pl-5 pr-5 hover:bg-red-400"
@@ -123,7 +114,6 @@ const MyPage = () => {
             </div>
           ))}
         </div>
-      </div>
     </>
   );
 };

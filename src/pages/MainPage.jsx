@@ -57,11 +57,8 @@ const MainPage = () => {
           data: { user }
         } = await supabase.auth.getUser();
         const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
-        if (error) {
-          throw error;
-        }
-        const selectionQuery = `${data?.selection?.level} ${data?.selection?.topics}`;
-
+        const selectionQuery = `${data.selection.level} ${data.selection.topics.join('|')}`;
+        
         setUser(user);
         setQuery(selectionQuery);
         await surveyVideos(selectionQuery);
@@ -73,7 +70,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <ToastContainer className="mt-12" position="top-right" />
+      <ToastContainer className="mt-12" position="top-right" autoClose='1000' hideProgressBar='true'/>
       <form onSubmit={searchVideos}>
         <h1 className="mb-5 flex justify-center font-['DungGeunMo'] text-6xl">DevTube</h1>
         <h2 className="mb-5 flex justify-center font-['DungGeunMo'] text-xl">더 많은 내용을 검색하세요!</h2>
