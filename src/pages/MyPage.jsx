@@ -83,13 +83,13 @@ const MyPage = () => {
             }}
           />
           <button
-            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
+            className="border-2 border-yellow-300 bg-yellow-100 pl-5 pr-5 hover:bg-yellow-200"
             onClick={() => updateNickname(nickname, id)}
           >
             완료
           </button>
           <button
-            className="border-2 border-red-500 bg-red-300 pl-5 pr-5 hover:bg-red-400"
+            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
             onClick={() => navigate('/')}
           >
             메인으로
