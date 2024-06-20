@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUserSelection } from '../lib/supabase/userSelctionApi';
+//같은 로직인데 setUserSelection부분이 없음
+//안 쓰이는 중
 import { supabase } from '../lib/supabase/supabase';
 
 const MainPage = () => {
@@ -8,18 +10,18 @@ const MainPage = () => {
   useEffect(() => {
     const fetchUserSelection = async () => {
       try {
-        const { data: userSelection, error } = await supabase
+        const { data, error } = await supabase
           .from('users')
           .select('selection')
-          .eq('id', '787fc251-c485-48b2-bb78-628b954992e9')
+          .eq('id', 'faaa3839-18ee-4064-87f4-9bdc994b4bde')
           .single();
 
         if (error) {
           console.error('Error fetching user selection:', error);
           throw error;
         }
-
-        setUserSelection(userSelection);
+        console.log(data);
+        setUserSelection(data);
       } catch (error) {
         console.error('Error in fetchUserSelection:', error);
       }
@@ -28,7 +30,7 @@ const MainPage = () => {
     fetchUserSelection();
   }, []);
 
-  return <>{JSON.stringify(userSelection)}</>;
+  return <>돼라</>;
 };
 
 export default MainPage;
