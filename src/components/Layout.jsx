@@ -127,9 +127,6 @@ const Layout = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (nickname) console.log(nickname);
-  // }, [nickname]);
   return (
     <>
       <NavBar>
