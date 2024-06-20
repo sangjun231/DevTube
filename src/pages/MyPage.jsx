@@ -96,13 +96,10 @@ const MyPage = () => {
         </div>
       </div>
       <div className="mt-8">
-        {/* <h1 className="flex justify-center font-bold">Saved Videos</h1> */}
         <h1 className="mb-8 flex justify-start font-['DungGeunMo'] text-4xl font-bold">저장한 영상</h1>
-
         <div className="grid grid-cols-3 gap-10">
           {likeVideos.map((video) => (
             <div key={video.id}>
-              {/* <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3> */}
               <h3
                 dangerouslySetInnerHTML={{ __html: video.video_title }}
                 className="mb-2 w-full truncate font-bold"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { supabase } from '../lib/supabase/supabase';
 
 const MainPage = () => {
