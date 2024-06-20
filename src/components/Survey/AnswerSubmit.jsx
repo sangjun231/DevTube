@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { searchYouTubeVideos } from '../../lib/api/youtubeAPI';
 // import logo from '../../assets/Devtube_logo.png'
 
 const AnswerSubmit = ({ answers }) => {
@@ -23,12 +22,11 @@ const AnswerSubmit = ({ answers }) => {
         onClick={() => {
           navigate('/');
           alert(JSON.stringify(answers));
-          searchYouTubeVideos(JSON.stringify(answers));
         }}
         // 24.06.19
         // 임의로 alert 달았어용
-        // searchYoutubeVideos 함수 import 해오고 달았음
-        // JSON.stringify(answers)로 넘겨보기
+        // 24.06.20
+        // alert에 answers 띄워봄
       >
         영상보러 가기
       </button>
