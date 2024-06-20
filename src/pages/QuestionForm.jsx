@@ -62,7 +62,7 @@ const QuestionForm = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         {step === '사전배경' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
         {step === '관심사' && (
           <RecommendationForm
