@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase/supabase';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { getAuthSession, getAuthUser, selectEqUser, userLogout } from '../lib/supabase/userApi';
 import { useQuery } from '@tanstack/react-query';
 import useIsLoginStore from '../zustand/isLoginStore';
@@ -61,21 +60,6 @@ function NavItem({ to, children }) {
   );
 }
 
-function NavSurveyItem({ to, children }) {
-  const location = useLocation();
-
-  // 현재 경로가 "/survey"가 아닌 경우에만 활성화
-  const isActive = location.pathname !== '/survey';
-
-  return isActive ? (
-    <Link to={to} className="left-0 right-0 top-0 mx-2 text-white no-underline hover:underline">
-      {children}
-    </Link>
-  ) : (
-    <></>
-  );
-}
-
 function Footer({ children }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
@@ -127,16 +111,16 @@ const Layout = () => {
     queryFn: getAuthUser
   });
 
+  useEffect(() => {
+    showNickname();
+  }, [authUser]);
+
   if (isError) {
     setIsLogin(false);
     userLogout();
     navigate('/login');
     return;
   }
-
-  useEffect(() => {
-    showNickname();
-  }, [authUser]);
 
   const handleLogout = async () => {
     setIsLogin(false);
@@ -148,7 +132,7 @@ const Layout = () => {
   return (
     <>
       <NavBar>
-        <NavItem to='/'>
+        <NavItem to="/">
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">

@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { surveyApi } from '../../lib/supabase/surveyApi';
 import { toast } from 'react-toastify';
-import userDataStore from '../../zustand/usreDataStore';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
   // const [level, setLevel] = useState('');
@@ -36,7 +34,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
       localStorage.setItem('answers', JSON.stringify(answers));
       onNext(answers);
     },
-    onError: () => {
+    onError: (e) => {
       console.error('답변 제출에 실패:', e.message);
       toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요.');
       navigate(0);

@@ -4,7 +4,6 @@ import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
 import { useQuery } from '@tanstack/react-query';
 import { getAuthSession, getAuthUser, userLogout } from '../../lib/supabase/userApi';
-import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import useIsLoginStore from '../../zustand/isLoginStore';
 
@@ -63,7 +62,7 @@ const QuestionForm = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         {step === '사전배경' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
         {step === '관심사' && (
           <RecommendationForm

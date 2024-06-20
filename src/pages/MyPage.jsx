@@ -1,6 +1,6 @@
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useVideos, useDeleteVideo } from '../lib/supabase/videoApi';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase/supabase';
 import useIdStore from '../zustand/idStore';
@@ -82,13 +82,13 @@ const MyPage = () => {
             }}
           />
           <button
-            className="border-2 border-yellow-300 bg-yellow-100 pl-5 pr-5 hover:bg-yellow-200"
+            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
             onClick={() => updateNickname(nickname, id)}
           >
             완료
           </button>
           <button
-            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
+            className="border-2 border-red-500 bg-red-300 pl-5 pr-5 hover:bg-red-400"
             onClick={() => navigate('/')}
           >
             메인으로
@@ -104,7 +104,6 @@ const MyPage = () => {
                 dangerouslySetInnerHTML={{ __html: video.video_title }}
                 className="mb-2 w-full truncate font-bold"
               ></h3>
-
               <div className="aspect-h-9 aspect-w-16">
                 <iframe
                   className="h-full w-full"
