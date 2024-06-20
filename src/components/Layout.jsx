@@ -159,7 +159,10 @@ const Layout = () => {
             💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
-          <button onClick={handleLogout} className="mx-3 border text-black bg-gray-100 rounded-md no-underline hover:underline px-3">
+          <button
+            onClick={handleLogout}
+            className="mx-3 rounded-md border bg-gray-100 px-3 text-black no-underline hover:underline"
+          >
             로그아웃
           </button>
         </div>

@@ -63,8 +63,7 @@ const QuestionForm = () => {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose="1000" hideProgressBar="true" />
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center">
         {step === '사전배경' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
         {step === '관심사' && (
           <RecommendationForm

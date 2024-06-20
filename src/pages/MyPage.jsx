@@ -68,12 +68,11 @@ const MyPage = () => {
 
   return (
     <>
-      <ToastContainer className="mt-12" position="top-right" />
       <div className="mb-20 flex w-full flex-col gap-8">
         <h1 className="font-['DungGeunMo'] text-4xl font-bold">닉네임 변경</h1>
         <div className="flex gap-5">
           <input
-            className="min-w-72 border-2 rounded-md border-black p-2 outline-none"
+            className="min-w-72 border-2 border-black p-2 outline-none"
             type="text"
             placeholder="닉네임을 입력해주세요"
             value={nickname}
@@ -83,7 +82,7 @@ const MyPage = () => {
             }}
           />
           <button
-            className="border-2 rounded-md border-yellow-500 bg-yellow-300 pl-5 pr-5 hover:bg-yellow-400"
+            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
             onClick={() => updateNickname(nickname, id)}
           >
             완료
