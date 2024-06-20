@@ -4,52 +4,70 @@ import { supabase } from '../lib/supabase/supabase';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 
 const MainPage = () => {
-  // const [userSelection, setUserSelection] = useState(null);
-  const [selectionQuery, setSelectionQuery] = useState('');
-  const [selectionVideos, setSelectionVideos] = useState([]);
+  const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [user, setUser] = useState(null);
+  const addVideoMutation = useAddVideo();
+
+  const searchVideos = async (e) => {
+    e.preventDefault();
+    await surveyVideos(query);
+  };
+
+  const surveyVideos = async (query) => {
+    try {
+      const youtubeVideos = await searchYouTubeVideos(query);
+      setSearchResults(
+        youtubeVideos.map((video) => ({
+          video_title: video.snippet.title,
+          video_id: video.id.videoId
+        }))
+      );
+    } catch (error) {
+      console.error('Error fetching data from YouTube API:', error);
+    }
+  };
+
+  const handleAddVideo = (video) => {
+    if (!user) {
+      toast.error('로그인이 필요합니다.');
+      return;
+    }
+
+    const videoLike = {
+      ...video,
+      video_like: user.id
+    };
+    try {
+      if (!toast.isActive('addVideo')) {
+        toast.success('해당 영상이 저장되었습니다.', {
+          toastId: 'addVideo'
+        });
+        addVideoMutation.mutate(videoLike);
+      }
+    } catch (error) {
+      console.error('Error adding video:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserSelection = async () => {
+    const fetchUserAndSelection = async () => {
       try {
-        const { data, error } = await supabase
-          .from('users')
-          .select('selection')
-          .eq('id', 'faaa3839-18ee-4064-87f4-9bdc994b4bde')
-          .single();
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+        const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
+        const selectionQuery = `${data.selection.level} ${data.selection.topics}`;
 
-        if (error) {
-          console.error('Error fetching user selection:', error);
-          throw error;
-        }
-        console.log(data);
-        const query = `${data.selection.level} ${data.selection.topics}`;
-        setSelectionQuery(query);
-        console.log(query);
+        setUser(user);
+        setQuery(selectionQuery);
+        await surveyVideos(selectionQuery);
       } catch (error) {
-        console.error('Error in fetchUserSelection:', error);
+        console.error('Error in fetchUserAndSelection:', error);
       }
     };
 
-    fetchUserSelection();
-  }, []);
-
-  //query안에 data.selection.level + data.selection.topics
-
-  useEffect(() => {
-    const renderSelectionVideos = async () => {
-      try {
-        const selectionVideos = await searchYouTubeVideos(selectionQuery);
-        setSelectionVideos(
-          selectionVideos.map((video) => ({
-            video_title: video.snippet.title,
-            video_id: video.id.videoId
-          }))
-        );
-      } catch (error) {
-        console.error('Error fetching data from YouTube API:', error);
-      }
-    };
-    renderSelectionVideos();
+    fetchUserAndSelection();
   }, []);
 
   return (

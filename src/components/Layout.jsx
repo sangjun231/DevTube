@@ -59,7 +59,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -78,20 +78,6 @@ const Layout = () => {
   const [nickname, setNickname] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setNickname(null);
-      }
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
   const fetchUserProfile = async (id) => {
     const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
 
@@ -111,6 +97,36 @@ const Layout = () => {
       navigate('/login');
     }
   };
+
+  useEffect(() => {
+    const loadSession = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      setSession(session);
+      if (session) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setNickname(null);
+      }
+    };
+
+    loadSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setNickname(null);
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
   return (
     <>
       <NavBar>
@@ -119,7 +135,7 @@ const Layout = () => {
         </NavItem>
         <div className="align-center flex">
           <Link to="/survey" className="mr-3">
-            survey
+            💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
           {session ? (
