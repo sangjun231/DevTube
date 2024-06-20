@@ -68,7 +68,6 @@ const MyPage = () => {
 
   return (
     <>
-      <ToastContainer className="mt-12" position="top-right" />
       <div className="mb-20 flex w-full flex-col gap-8">
         <h1 className="font-['DungGeunMo'] text-4xl font-bold">닉네임 변경</h1>
         <div className="flex gap-5">
