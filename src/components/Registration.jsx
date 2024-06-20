@@ -1,14 +1,13 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { addUser, userRegist } from '../lib/supabase/userApi';
-import useModalStore from '../zustand/modalStore';
-import Modal from './Modal';
-import ConfirmModal from './ConfirmModal';
+import { addUser, userLogin, userRegist } from '../lib/supabase/userApi';
+import useIsLoginStore from '../zustand/isLoginStore';
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const Registration = () => {
-  const { modal, confirmModal, toggle, confirmToggle } = useModalStore((state) => state);
   const navigate = useNavigate();
-  const [modalTask, setModalTask] = useState('');
+  const { setIsLogin } = useIsLoginStore((state) => state);
   const email = useRef('');
   const nickname = useRef('');
   const password = useRef('');
@@ -19,58 +18,55 @@ const Registration = () => {
     e.preventDefault();
 
     if (!email.trim() || !nickname.trim() || !password.trim()) {
-      /* alert('회원가입 양식에 맞게 입력해 주세요'); */
-      toggle();
-      setModalTask('회원가입 양식에 맞게 입력해 주세요');
+      toast.error('회원가입 양식에 맞게 입력해 주세요');
       return;
     }
 
     if (!emailRegex.test(email)) {
-      toggle();
-      setModalTask('올바른 이메일 형식이 아닙니다');
+      toast.error('올바른 이메일 형식이 아닙니다');
       return;
     }
 
     if (!(nickname.length >= 4 && nickname.length <= 10)) {
-      toggle();
-      setModalTask('닉네임은 4자리 이상, 10자리 이하여야 합니다.');
+      toast.error('닉네임은 4자리 이상, 10자리 이하여야 합니다.');
       return;
     }
 
     if (!(password.length >= 6 && password.length <= 14)) {
-      toggle();
-      setModalTask('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
+      toast.error('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
       return;
     }
 
     if (!confirm('회원가입을 완료하시겠습니까?')) return;
-    /* setModalTask('회원가입을 완료하시겠습니까?'); */
 
     const registRes = await userRegist({ email, password });
 
     if (registRes?.error) {
-      toggle();
-      setModalTask('회원가입이 완료되지 않았습니다. 다시 시도하세요');
+      toast.error('회원가입이 완료되지 않았습니다. 다시 시도하세요');
       return;
     }
 
-    await addUser({
+    const addUserRes = await addUser({
       id: registRes?.data.user.id,
       email,
       nickname
     });
 
-    toggle();
-    setModalTask('회원가입이 완료되었습니다.');
+    if (addUserRes.error) {
+      toast.error('회원가입 절차에 문제가 발생했습니다. 다시 시도하세요');
+      return;
+    }
 
-    navigate('/login');
+    await userLogin({ email, password });
+    setIsLogin(true);
+    navigate('/survey');
+    return;
   };
 
   return (
     <>
-      {modal ? <Modal modalTask={modalTask} /> : null}
-      {confirmModal ? <ConfirmModal modalTask={modalTask} /> : null}
-      <form className="flex w-1/3 flex-col items-center justify-center gap-12 bg-bgDev p-12">
+      <ToastContainer className="mt-12" position="top-right" autoClose="1000" hideProgressBar="true" />
+      <form className="flex min-w-96 flex-col items-center justify-center gap-12 bg-bgDev p-12">
         <h1 className="text-xl font-bold">회원가입</h1>
         <div className="flex w-full flex-col items-center justify-center gap-5">
           <div className="w-full">
