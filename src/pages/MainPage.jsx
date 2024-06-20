@@ -95,7 +95,6 @@ const MainPage = () => {
 
   return (
     <div>
-      <ToastContainer className="mt-12" position="top-right" />
       <form onSubmit={handleSearch}>
         <h1 className="mb-5 flex justify-center font-['DungGeunMo'] text-6xl">DevTube</h1>
         <h2 className="mb-5 flex justify-center font-['DungGeunMo'] text-xl">더 많은 내용을 검색하세요!</h2>
