@@ -57,13 +57,11 @@ const MainPage = () => {
         const {
           data: { user }
         } = await supabase.auth.getUser();
-        setUser(user);
-
         const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
-
         const selectionQuery = `${data.selection.level} ${data.selection.topics}`;
-        setQuery(selectionQuery);
 
+        setUser(user);
+        setQuery(selectionQuery);
         await surveyVideos(selectionQuery);
       } catch (error) {
         console.error('Error in fetchUserAndSelection:', error);

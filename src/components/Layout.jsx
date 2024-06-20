@@ -78,6 +78,26 @@ const Layout = () => {
   const [nickname, setNickname] = useState(null);
   const navigate = useNavigate();
 
+  const fetchUserProfile = async (id) => {
+    const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
+
+    if (error) {
+      console.error('닉네임 정보를 받아올 수 없습니다', error);
+    } else {
+      setNickname(data.nickname);
+    }
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!confirm('로그아웃 하시겠습니까?')) return;
+    if (error) console.error('로그아웃에 실패하였습니다', error);
+    else {
+      alert('로그아웃 되었습니다.');
+      navigate('/login');
+    }
+  };
+
   useEffect(() => {
     const loadSession = async () => {
       const {
@@ -106,25 +126,6 @@ const Layout = () => {
       authListener.subscription.unsubscribe();
     };
   }, []);
-  const fetchUserProfile = async (id) => {
-    const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
-
-    if (error) {
-      console.error('닉네임 정보를 받아올 수 없습니다', error);
-    } else {
-      setNickname(data.nickname);
-    }
-  };
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!confirm('로그아웃 하시겠습니까?')) return;
-    if (error) console.error('로그아웃에 실패하였습니다', error);
-    else {
-      alert('로그아웃 되었습니다.');
-      navigate('/login');
-    }
-  };
 
   // useEffect(() => {
   //   if (nickname) console.log(nickname);
