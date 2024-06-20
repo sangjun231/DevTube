@@ -41,7 +41,7 @@ const MyPage = () => {
 
   return (
     <>
-      <ToastContainer className="mt-12" position="top-right" />
+      <ToastContainer className="mt-12" position="top-right" autoClose='800' hideProgressBar='true'/>
       {/* <div className="rounded-md2 mx-auto my-0 max-w-sm bg-slate-100 p-4">
         <h2 className="mb-4">프로필 수정</h2>
         <div className="mb-4">
