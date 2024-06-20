@@ -148,7 +148,7 @@ const Layout = () => {
   return (
     <>
       <NavBar>
-        <NavItem to={() => {}}>
+        <NavItem to='/'>
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
