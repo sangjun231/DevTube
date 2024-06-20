@@ -7,7 +7,6 @@ import { supabase } from '../lib/supabase/supabase';
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [user, setUser] = useState(null);
   const addVideoMutation = useAddVideo();
 
   const searchVideos = async (e) => {
@@ -37,7 +36,7 @@ const MainPage = () => {
 
     const videoLike = {
       ...video,
-      video_like: user.id
+      video_like: id
     };
     try {
       if (!toast.isActive('addVideo')) {
@@ -63,9 +62,7 @@ const MainPage = () => {
         setUser(user);
         setQuery(selectionQuery);
         await surveyVideos(selectionQuery);
-      } catch (error) {
-        console.error('Error in fetchUserAndSelection:', error);
-      }
+      } catch (error) {}
     };
 
     fetchUserAndSelection();
