@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AnswerSubmit = ({  answers, setStep, setAnswers}) => {
+const AnswerSubmit = ({  answers, setStep }) => {
   const navigate = useNavigate();
-  // console.log('제출 페이지',answers);
+  console.log('제출 페이지',answers);
 
   return (
     <div className='flex flex-col text-center items-center'>
@@ -20,13 +20,6 @@ const AnswerSubmit = ({  answers, setStep, setAnswers}) => {
         onClick={() => navigate('/')}
       >
         영상보러 가기
-      </button>
-      <button className="mt-8 underline  cursor-pointer" onClick={() => {
-          setStep('관심사');
-          setAnswers((prevAnswers) => ({ ...prevAnswers, topics: [] }));
-          // localStorage.setItem('answers', JSON.stringify({ ...answers, topics: [] }));
-        }}>
-        이전으로
       </button>
     </div>
   );
