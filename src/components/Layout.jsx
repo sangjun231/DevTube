@@ -79,7 +79,21 @@ const Layout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const loadSession = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      setSession(session);
+      if (session) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setNickname(null);
+      }
+    };
+
+    loadSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
         fetchUserProfile(session.user.id);
@@ -88,9 +102,9 @@ const Layout = () => {
       }
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
   const fetchUserProfile = async (id) => {
     const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
@@ -111,6 +125,10 @@ const Layout = () => {
       navigate('/login');
     }
   };
+
+  // useEffect(() => {
+  //   if (nickname) console.log(nickname);
+  // }, [nickname]);
   return (
     <>
       <NavBar>
@@ -118,8 +136,8 @@ const Layout = () => {
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
-          <Link to="/survey" className="mr-3 rounded bg-gray-700">
-            영상 추천 받기
+          <Link to="/survey" className="mr-3">
+            💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
           {session ? (
