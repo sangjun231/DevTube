@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 
 const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
-
   const navigate = useNavigate();
 
   const topics = [
@@ -29,7 +28,6 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
   const recommendMutation = useMutation({
     mutationFn: async ({ answers, userId }) => await surveyApi({ answers, userId }),
     onSuccess: () => {
-      // localStorage.setItem('answers', JSON.stringify(answers));
       onNext(answers);
     },
     onError: (e) => {
@@ -70,7 +68,6 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
 
     console.log(userId);
     recommendMutation.mutate({ answers, userId });
-
   };
 
   return (

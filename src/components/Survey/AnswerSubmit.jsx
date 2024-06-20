@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 const AnswerSubmit = ({ setStep, setAnswers }) => {
   const navigate = useNavigate();
-  // console.log('제출 페이지',answers);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -25,7 +24,6 @@ const AnswerSubmit = ({ setStep, setAnswers }) => {
         onClick={() => {
           setStep('관심사');
           setAnswers((prevAnswers) => ({ ...prevAnswers, topics: [] }));
-          // localStorage.setItem('answers', JSON.stringify({ ...answers, topics: [] }));
         }}
       >
         이전으로
