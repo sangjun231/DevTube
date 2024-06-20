@@ -83,13 +83,13 @@ const MainPage = () => {
             className="mb-2 box-border rounded border-2 p-1"
             type="text"
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="오늘은 무슨 공부를 할까?"
+            placeholder=" 오늘은 무슨 공부를 할까?"
           />
           <button
             className="border-3 mb-2 ml-4 flex cursor-pointer items-center justify-center rounded bg-yellow-300 p-2 text-sm font-bold text-black no-underline hover:underline"
             type="submit"
           >
-            Search
+            &nbsp;검색&nbsp;
           </button>
         </div>
       </form>
@@ -106,7 +106,7 @@ const MainPage = () => {
               ></iframe>
             </div>
             <button className="mt-2 font-bold text-green-500" onClick={() => handleAddVideo(video)}>
-              Save
+              저장하기
             </button>
           </div>
         ))}
