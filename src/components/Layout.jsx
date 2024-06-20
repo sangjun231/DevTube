@@ -148,7 +148,7 @@ const Layout = () => {
   return (
     <>
       <NavBar>
-        <NavItem to={() => {}}>
+        <NavItem to={'/'}>
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
@@ -159,7 +159,10 @@ const Layout = () => {
             💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
-          <button onClick={handleLogout} className="mx-2 border text-white no-underline hover:underline">
+          <button
+            onClick={handleLogout}
+            className="mx-3 rounded-md border bg-gray-100 px-3 text-black no-underline hover:underline"
+          >
             로그아웃
           </button>
         </div>
