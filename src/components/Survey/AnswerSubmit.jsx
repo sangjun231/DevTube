@@ -7,7 +7,7 @@ const AnswerSubmit = ({  answers, setStep, setAnswers}) => {
 
   return (
     <div className='flex flex-col text-center items-center'>
-      <div className='flex flex-row mt-40'>
+      <div className='flex flex-row'>
         <div className="flex flex-col items-center justify-center gap-y-2">
           <div className="text text-center font-bold mb-5 text-3xl">답변제출 완료 🙌</div>
           <p className='text-xl'>답변이 제출되었습니다! </p>
