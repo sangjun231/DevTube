@@ -136,7 +136,7 @@ const MainPage = () => {
       {pageToken && (
         <div className="mt-4 flex justify-center">
           <button
-            className="border-3 flex cursor-pointer items-center justify-center rounded bg-blue-500 p-2 text-sm font-bold text-white no-underline hover:underline"
+            className="border-3 flex cursor-pointer items-center justify-center rounded bg-black p-2 text-sm font-bold text-white no-underline hover:underline"
             onClick={() => searchVideos(query, pageToken)}
             disabled={loading}
           >
