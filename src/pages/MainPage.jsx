@@ -7,26 +7,39 @@ import { supabase } from '../lib/supabase/supabase';
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [pageToken, setPageToken] = useState('');
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const addVideoMutation = useAddVideo();
 
-  const searchVideos = async (e) => {
-    e.preventDefault();
-    await surveyVideos(query);
-  };
-
-  const surveyVideos = async (query) => {
+  const searchVideos = async (query, pageToken = '', reset = false) => {
+    setLoading(true);
     try {
-      const youtubeVideos = await searchYouTubeVideos(query);
-      setSearchResults(
-        youtubeVideos.map((video) => ({
-          video_title: video.snippet.title,
-          video_id: video.id.videoId
-        }))
+      const youtubeVideos = await searchYouTubeVideos(query, pageToken);
+      setSearchResults((prevResults) =>
+        reset
+          ? youtubeVideos.items.map((video) => ({
+              video_title: video.snippet.title,
+              video_id: video.id.videoId
+            }))
+          : [
+              ...prevResults,
+              ...youtubeVideos.items.map((video) => ({
+                video_title: video.snippet.title,
+                video_id: video.id.videoId
+              }))
+            ]
       );
+      setPageToken(youtubeVideos.nextPageToken || '');
     } catch (error) {
       console.error('Error fetching data from YouTube API:', error);
     }
+    setLoading(false);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    searchVideos(query, '', true);
   };
 
   const handleAddVideo = (video) => {
@@ -57,14 +70,23 @@ const MainPage = () => {
         const {
           data: { user }
         } = await supabase.auth.getUser();
+        if (!user) {
+          toast.error('로그인이 필요합니다.');
+          return;
+        }
         const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
-        const selectionQuery = `${data.selection.level} ${data.selection.topics}`;
+        if (error || !data) {
+          toast.error('설문조사를 완료해야 합니다.');
+          return;
+        }
 
-        setUser(user);
+        const selectionQuery = `${data.selection.level} ${data.selection.topics.join('|')}`;
+        setUser({ ...user, selection: data.selection });
         setQuery(selectionQuery);
-        await surveyVideos(selectionQuery);
+        searchVideos(selectionQuery, '', true); // Reset results and search
       } catch (error) {
         console.error('Error in fetchUserAndSelection:', error);
+        toast.error('사용자 정보를 가져오는 중 오류가 발생했습니다.');
       }
     };
 
@@ -74,7 +96,7 @@ const MainPage = () => {
   return (
     <div>
       <ToastContainer className="mt-12" position="top-right" />
-      <form onSubmit={searchVideos}>
+      <form onSubmit={handleSearch}>
         <h1 className="mb-5 flex justify-center font-['DungGeunMo'] text-6xl">DevTube</h1>
         <h2 className="mb-5 flex justify-center font-['DungGeunMo'] text-xl">더 많은 내용을 검색하세요!</h2>
         <div className="mb-8 flex items-center justify-center">
@@ -111,6 +133,17 @@ const MainPage = () => {
           </div>
         ))}
       </div>
+      {pageToken && (
+        <div className="mt-4 flex justify-center">
+          <button
+            className="border-3 flex cursor-pointer items-center justify-center rounded bg-blue-500 p-2 text-sm font-bold text-white no-underline hover:underline"
+            onClick={() => searchVideos(query, pageToken)}
+            disabled={loading}
+          >
+            {loading ? '로딩 중...' : '더보기'}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
