@@ -3,10 +3,14 @@ import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
 import { useQuery } from '@tanstack/react-query';
-import { getUser } from '../../lib/supabase/userApi';
+import { getAuthSession, getAuthUser, userLogout } from '../../lib/supabase/userApi';
 import { ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import useIsLoginStore from '../../zustand/isLoginStore';
 
 const QuestionForm = () => {
+  const navigate = useNavigate();
+  const { setIsLogin } = useIsLoginStore((state) => state);
   const [answers, setAnswers] = useState({
     isMajor: '',
     level: '',
@@ -14,19 +18,37 @@ const QuestionForm = () => {
   });
   const [step, setStep] = useState('사전배경');
 
-  const { data: userData, isPending, isError, error } = useQuery({
-    queryKey: ['userInfo'], 
-    queryFn: getUser, 
-    enabled: !!localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'), 
-    retry: false 
+  const {
+    data: userData,
+    isPending,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getAuthUser,
+    enabled: !!localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'),
+    retry: false
   });
 
-  if(isPending) {
-    return <div>로딩중</div>
-  }
+  const pendingRedirect = async () => {
+    if (isPending) {
+      const { data } = await getAuthSession();
+      if (!data.session) {
+        setIsLogin(false);
+        userLogout();
+        navigate('/login');
+        return;
+      }
+      return <div>로딩중</div>;
+    }
+  }; //
 
-  if(isError) {
-    return (<div>`유저의 정보를 불러 올 수 없습니다.${error}`</div>)
+  useEffect(() => {
+    pendingRedirect();
+  }, []);
+
+  if (isError) {
+    return <div>`유저의 정보를 불러 올 수 없습니다.${error}`</div>;
   }
 
   const onNextSurvey = (data) => {
@@ -41,12 +63,17 @@ const QuestionForm = () => {
 
   return (
     <>
-      <ToastContainer className="mt-12" position="top-right" autoClose='1000' hideProgressBar='true'/>
+      <ToastContainer className="mt-12" position="top-right" autoClose="1000" hideProgressBar="true" />
       <div className="flex items-center justify-center">
         {step === '사전배경' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
         {step === '관심사' && (
-          <RecommendationForm onNext={onRecommendationNext} setStep={setStep} answers={answers} setAnswers={setAnswers} 
-          userId={userData.id} />
+          <RecommendationForm
+            onNext={onRecommendationNext}
+            setStep={setStep}
+            answers={answers}
+            setAnswers={setAnswers}
+            userId={userData.id}
+          />
         )}
         {step === '답변제출' && <AnswerSubmit setStep={setStep} answers={answers} setAnswers={setAnswers} />}
       </div>
