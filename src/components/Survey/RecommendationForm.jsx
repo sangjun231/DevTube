@@ -6,9 +6,7 @@ import userDataStore from '../../zustand/usreDataStore';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
-  // const [level, setLevel] = useState('');
-  // const [topics, setTopics] = useState([]);
-  // console.log('여기는 recommendation', answers);
+
   const navigate = useNavigate();
 
   const topics = [
@@ -33,7 +31,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
   const recommendMutation = useMutation({
     mutationFn: async ({ answers, userId }) => await surveyApi({ answers, userId }),
     onSuccess: () => {
-      localStorage.setItem('answers', JSON.stringify(answers));
+      // localStorage.setItem('answers', JSON.stringify(answers));
       onNext(answers);
     },
     onError: () => {
@@ -72,22 +70,9 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     setAnswers(answers);
     console.log('제출할 데이터 준비', answers);
 
-    //    const userId = userId;
     console.log(userId);
     recommendMutation.mutate({ answers, userId });
 
-    // try {
-    //
-
-    //   await surveyApi({ answers, userId });
-    //   localStorage.setItem('answers', JSON.stringify(answers));
-    //   onNext(answers);
-
-    // } catch (e) {
-    //   console.error('답변 제출에 실패:', e.message);
-    // //  toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요.');
-    //   navigate(0);
-    // }
   };
 
   return (
@@ -95,7 +80,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
       <div className="mt-1 flex flex-col items-center justify-center">
         <div className="w-[550px] rounded-lg bg-slate-200 p-8 shadow-lg">
           <h1 className="mb-4 text-left text-xl font-semibold">마지막 질문이에요! 😊</h1>
-          <p className="mb-6 text-left">관심사에 따른 영상을 추천해 드릴게요!</p>
+          <p className="mb-6 text-left">관심사에 따른 영상을 추천해드릴게요!</p>
           <form onSubmit={onSubmitSurvey}>
             <div className="mb-6 flex flex-col rounded-2xl border-2 border-solid border-gray-400 p-4">
               <label className="mb-2 block text-lg font-medium">관심 있는 기술 스택을 골라주세요</label>

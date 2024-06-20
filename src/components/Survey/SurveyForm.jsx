@@ -17,7 +17,7 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
       toast.error('모든 질문에 대답해 주세요!');
       return;
     }
-    localStorage.setItem('answers', JSON.stringify(answers));
+    // localStorage.setItem('answers', JSON.stringify(answers));
 
     onNext(answers);
   };
@@ -28,8 +28,8 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
       <div className="w-[550px] rounded-lg bg-slate-200 p-8 shadow-lg">
         <h1 className="mb-4 text-left text-xl font-semibold">안녕하세요! 😊</h1>
         <p className="mb-6 text-left ">
-          몇가지 간단한 질문에 답변해 주시면, <br />
-          알맞는 영상을 추천해 드릴게요!
+          몇 가지 간단한 질문에 답변해주시면, <br />
+          알맞은 영상을 추천해드릴게요!
         </p>
         <form onSubmit={onSubmit}>
           <div className="mb-4 flex items-center border-solid border-2 border-gray-400 p-4 rounded-2xl justify-between">
@@ -60,7 +60,7 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
             </div>
           </div>
           <div className="mb-4 flex flex-col  border-solid border-2 border-gray-400 p-4 rounded-2xl justify-between">
-            <label className="mr-4 block font-medium items-left mb-4 text-lg ">본인의 수준을 골라주세요</label>
+            <label className="mr-4 block font-medium items-left mb-4 text-lg ">본인의 수준을 골라주세요.</label>
             <div className="flex space-x-4 justify-end">
             <label className='text-lg'>
                 <input 

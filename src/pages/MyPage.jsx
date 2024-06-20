@@ -72,7 +72,7 @@ const MyPage = () => {
         <h1 className="font-['DungGeunMo'] text-4xl font-bold">닉네임 변경</h1>
         <div className="flex gap-5">
           <input
-            className="min-w-72 border-2 border-black p-2 outline-none"
+            className="min-w-72 border-2 border-black p-2 outline-none rounded-md"
             type="text"
             placeholder="닉네임을 입력해주세요"
             value={nickname}
@@ -82,13 +82,13 @@ const MyPage = () => {
             }}
           />
           <button
-            className="border-2 border-yellow-300 bg-yellow-100 pl-5 pr-5 hover:bg-yellow-200"
+            className="border-2 rounded-md border-yellow-300 bg-yellow-100 pl-5 pr-5 hover:bg-yellow-200"
             onClick={() => updateNickname(nickname, id)}
           >
             완료
           </button>
           <button
-            className="border-2 border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
+            className="border-2 rounded-md border-slate-300 bg-slate-100 pl-5 pr-5 hover:bg-slate-200"
             onClick={() => navigate('/')}
           >
             메인으로
