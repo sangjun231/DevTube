@@ -6,8 +6,8 @@ const AnswerSubmit = ({ answers, setStep, setAnswers }) => {
   // console.log('제출 페이지',answers);
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <div className="mt-40 flex flex-row">
+    <div className='flex flex-col text-center items-center'>
+      <div className='flex flex-row'>
         <div className="flex flex-col items-center justify-center gap-y-2">
           <div className="text mb-5 text-center text-3xl font-bold">답변제출 완료 🙌</div>
           <p className="text-xl">답변이 제출되었습니다! </p>

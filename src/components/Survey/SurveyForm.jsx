@@ -24,7 +24,7 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
 
 
   return (
-    <div className="flex items-center justify-center mt-20">
+    <div className="flex items-center justify-center ">
       <div className="w-[550px] rounded-lg bg-slate-200 p-8 shadow-lg">
         <h1 className="mb-4 text-left text-xl font-semibold">안녕하세요! 😊</h1>
         <p className="mb-6 text-left ">
