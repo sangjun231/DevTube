@@ -61,11 +61,18 @@ const MyPage = () => {
         </div>
       </div>
       <div className="mt-8">
-        <h1 className="flex justify-center font-bold">Saved Videos</h1>
+        {/* <h1 className="flex justify-center font-bold">Saved Videos</h1> */}
+        <h1 className="mb-5 flex justify-center font-['DungGeunMo'] text-3xl font-bold">북마크한 영상</h1>
+
         <div className="grid grid-cols-3 gap-10">
           {likeVideos.map((video) => (
             <div key={video.id}>
-              <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
+              {/* <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3> */}
+              <h3
+                dangerouslySetInnerHTML={{ __html: video.video_title }}
+                className="mb-2 w-full truncate font-bold"
+              ></h3>
+
               <div className="aspect-h-9 aspect-w-16">
                 <iframe
                   className="h-full w-full"
@@ -74,7 +81,7 @@ const MyPage = () => {
                   allowFullScreen
                 ></iframe>
               </div>
-              <button className="mt-2 text-red-500" onClick={() => handleDelete(video.id)}>
+              <button className="mt-2 font-bold text-red-500" onClick={() => handleDelete(video.id)}>
                 Delete
               </button>
             </div>
