@@ -75,27 +75,28 @@ const MainPage = () => {
     <div>
       <ToastContainer className="mt-12" position="top-right" />
       <form onSubmit={searchVideos}>
-        <h1 className="flex justify-center font-bold">YouTube Video Search</h1>
+        <h1 className="mb-5 flex justify-center font-['DungGeunMo'] text-6xl">DevTube</h1>
+        <h2 className="mb-5 flex justify-center font-['DungGeunMo'] text-xl">더 많은 내용을 검색하세요!</h2>
         <div className="mb-8 flex items-center justify-center">
           <input
+            autoFocus
             className="mb-2 box-border rounded border-2 p-1"
             type="text"
-            value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search term"
+            placeholder=" 오늘은 무슨 공부를 할까?"
           />
           <button
-            className="mb-2 ml-4 flex cursor-pointer items-center justify-center rounded border-2 bg-customPurple p-1 text-white no-underline hover:underline"
+            className="border-3 mb-2 ml-4 flex cursor-pointer items-center justify-center rounded bg-yellow-300 p-2 text-sm font-bold text-black no-underline hover:underline"
             type="submit"
           >
-            Search
+            &nbsp;검색&nbsp;
           </button>
         </div>
       </form>
       <div className="grid grid-cols-3 gap-4">
         {searchResults.map((video) => (
           <div key={video.video_id}>
-            <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
+            <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="mb-2 w-full truncate font-bold"></h3>
             <div className="aspect-h-9 aspect-w-16">
               <iframe
                 className="h-full w-full"
@@ -104,8 +105,8 @@ const MainPage = () => {
                 allowFullScreen
               ></iframe>
             </div>
-            <button className="mt-2 text-green-500" onClick={() => handleAddVideo(video)}>
-              Save
+            <button className="mt-2 font-bold text-green-500" onClick={() => handleAddVideo(video)}>
+              저장하기
             </button>
           </div>
         ))}

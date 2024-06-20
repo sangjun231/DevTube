@@ -9,7 +9,6 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
   // const [level, setLevel] = useState('');
   // const [topics, setTopics] = useState([]);
   // console.log('여기는 recommendation', answers);
-  const { user, setUser, userIdData, setUserIdData } = userDataStore();
   const navigate = useNavigate();
 
   const topics = [
@@ -21,7 +20,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     'JavaScript',
     'React',
     'TypeScript',
-    'next.js',
+    'Next.js ',
     'Vue.js',
     'Redux Toolkit',
     'Zustand',

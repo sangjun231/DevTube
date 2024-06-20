@@ -58,7 +58,7 @@ const MyPage = () => {
   return (
     <>
       <ToastContainer className="mt-12" position="top-right" />
-      <div className="rounded-md2 mx-auto my-0 max-w-sm bg-slate-100 p-4">
+      {/* <div className="rounded-md2 mx-auto my-0 max-w-sm bg-slate-100 p-4">
         <h2 className="mb-4">프로필 수정</h2>
         <div className="mb-4">
           <label className="mb-2 block">닉네임</label>
@@ -86,13 +86,20 @@ const MyPage = () => {
             돌아가기
           </Link>
         </div>
-      </div>
+      </div> */}
       <div className="mt-8">
-        <h1 className="flex justify-center font-bold">Saved Videos</h1>
+        {/* <h1 className="flex justify-center font-bold">Saved Videos</h1> */}
+        <h1 className="mb-8 flex justify-center font-['DungGeunMo'] text-4xl font-bold">저장한 영상</h1>
+
         <div className="grid grid-cols-3 gap-10">
           {likeVideos.map((video) => (
             <div key={video.id}>
-              <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
+              {/* <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3> */}
+              <h3
+                dangerouslySetInnerHTML={{ __html: video.video_title }}
+                className="mb-2 w-full truncate font-bold"
+              ></h3>
+
               <div className="aspect-h-9 aspect-w-16">
                 <iframe
                   className="h-full w-full"
@@ -101,8 +108,8 @@ const MyPage = () => {
                   allowFullScreen
                 ></iframe>
               </div>
-              <button className="mt-2 text-red-500" onClick={() => handleDelete(video.id)}>
-                Delete
+              <button className="mt-2 font-bold text-red-500" onClick={() => handleDelete(video.id)}>
+                삭제하기
               </button>
             </div>
           ))}

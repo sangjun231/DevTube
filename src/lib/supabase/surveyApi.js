@@ -13,7 +13,7 @@ export const surveyApi = async ({answers, userId}) => {
     if (error) throw new Error(`답변 제출에 실패했습니다. 다시 시도해 주세요: ${error.message}`);
 
     if (!data || data) {
-      console.log('제출완')
+     // console.log('제출완료')
       toast.success('답변 제출이 제출되었습니다.');
       return data;
     } 
