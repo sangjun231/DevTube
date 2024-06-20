@@ -3,10 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { addUser, userRegist } from '../lib/supabase/userApi';
 import useModalStore from '../zustand/modalStore';
 import Modal from './Modal';
-import ConfirmModal from './ConfirmModal';
 
 const Registration = () => {
-  const { modal, confirmModal, toggle, confirmToggle } = useModalStore((state) => state);
+  const { modal, toggle } = useModalStore((state) => state);
   const navigate = useNavigate();
   const [modalTask, setModalTask] = useState('');
   const email = useRef('');
@@ -19,7 +18,6 @@ const Registration = () => {
     e.preventDefault();
 
     if (!email.trim() || !nickname.trim() || !password.trim()) {
-      /* alert('회원가입 양식에 맞게 입력해 주세요'); */
       toggle();
       setModalTask('회원가입 양식에 맞게 입력해 주세요');
       return;
@@ -61,15 +59,13 @@ const Registration = () => {
     });
 
     toggle();
-    setModalTask('회원가입이 완료되었습니다.');
-
-    navigate('/login');
+    setModalTask('회원가입이 완료되었습니다. 영상 추천을 위한 설문 페이지로 이동합니다.');
+    navigate('/survey');
   };
 
   return (
     <>
       {modal ? <Modal modalTask={modalTask} /> : null}
-      {confirmModal ? <ConfirmModal modalTask={modalTask} /> : null}
       <form className="flex w-1/3 flex-col items-center justify-center gap-12 bg-bgDev p-12">
         <h1 className="text-xl font-bold">회원가입</h1>
         <div className="flex w-full flex-col items-center justify-center gap-5">

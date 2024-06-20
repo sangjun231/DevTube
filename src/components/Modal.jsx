@@ -24,7 +24,9 @@ const Modal = ({ modalTask }) => {
       >
         <div className="flex w-96 flex-col items-center justify-center gap-7 bg-bgDev p-5">
           <h1 className="w-full text-left text-xl font-bold">알림</h1>
-          <p className="w-full text-sm">{modalTask}</p>
+          <p className="w-full text-sm" style={{ whiteSpace: 'pre-line' }}>
+            {modalTask}
+          </p>
           <div className="flex w-full justify-end gap-3 text-sm">
             <button id="yes" onClick={() => toggleFor()} className="w-1/4 bg-yellow-300 p-2 hover:bg-yellow-400">
               확인

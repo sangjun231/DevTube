@@ -1,5 +1,7 @@
 import { supabase } from './supabase';
 
+/* auth schema users table api */
+
 export const userRegist = async ({ email, password }) => {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -24,16 +26,24 @@ export const userLoginOAuth = async (provider) => {
 }; // 서드 파티 로그인
 
 export const userLogout = async () => {
-  const { error } = await supabase.auth.signOut();
-  return { error };
+  const { data, error } = await supabase.auth.signOut();
+  localStorage.removeItem('answers');
+  return { data, error };
 }; // 로그아웃
 
-export const getUser = async () => {
+export const getAuthUser = async () => {
   const {
     data: { user }
   } = await supabase.auth.getUser();
-  return { data: { user } };
-}; // 사용자 정보 SELECT
+  return user;
+}; // auth 사용자 정보 SELECT
+
+export const getAuthSession = async () => {
+  const { data, error } = await supabase.auth.getSession();
+  return { data, error };
+}; // auth 사용자 토큰 정보 SELECT
+
+/* ------------------------------------------------------------------------ */
 
 /* public schema users table api */
 
@@ -46,5 +56,9 @@ export const addUser = async ({ id, email, nickname }) => {
     }
   ]);
   return { data, error };
-};
-// public의 users에 사용자 INSERT
+}; // public의 users에 사용자 INSERT
+
+export const selectEqUser = async (authId) => {
+  const { data, error } = await supabase.from('users').select('*').eq('id', authId);
+  return { data, error };
+}; // 고유 ID가 일치하는 사용자 정보 SELECT

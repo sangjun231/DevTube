@@ -20,18 +20,18 @@ const Router = createBrowserRouter([
         element: <MyPage />
       },
       {
-        path: '/auth',
-        element: <Auth />
-      },
-      {
-        path: '/login',
-        element: <Login />
-      },
-      {
         path: '/survey',
         element: <QuestionForm />
       }
     ]
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/auth',
+    element: <Auth />
   }
 ]);
 

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/supabase';
+import { userLogout } from '../lib/supabase/userApi';
+import Modal from './Modal';
+import useModalStore from '../zustand/modalStore';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);
@@ -56,7 +59,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -73,15 +76,21 @@ function FooterItem({ to, children }) {
 const Layout = () => {
   const [session, setSession] = useState(null);
   const [nickname, setNickname] = useState(null);
+  const [modalTask, setModalTask] = useState('');
   const navigate = useNavigate();
+  const { modal, toggle } = useModalStore((state) => state);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session) {
+        console.log(session);
         fetchUserProfile(session.user.id);
       } else {
+        alert('세션이 존재하지 않습니다. 로그인 페이지로 이동합니다.');
         setNickname(null);
+        userLogout();
+        navigate('/login');
       }
     });
 
@@ -89,6 +98,7 @@ const Layout = () => {
       setSession(session);
     });
   }, []);
+
   const fetchUserProfile = async (id) => {
     const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
 
@@ -100,16 +110,13 @@ const Layout = () => {
   };
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!confirm('로그아웃 하시겠습니까?')) return;
+    const { error } = await userLogout();
     if (error) console.error('로그아웃에 실패하였습니다', error);
-    else {
-      alert('로그아웃 되었습니다.');
-      navigate('/login');
-    }
+    navigate('/login');
   };
   return (
     <>
+      {modal ? <Modal modalTask={modalTask} /> : null}
       <NavBar>
         <NavItem to="/">
           <img className="size-14" src="img/12logo.png" alt="logo_image" />

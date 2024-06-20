@@ -1,14 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 import { ToastContainer, toast } from 'react-toastify';
-import { supabase } from '../lib/supabase/supabase';
+import { useQuery } from '@tanstack/react-query';
+import { selectEqUser, userLogout } from '../lib/supabase/userApi';
+import useIdStore from '../zustand/idStore';
+import { useNavigate } from 'react-router-dom';
+import useModalStore from '../zustand/modalStore';
+import Modal from '../components/Modal';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [user, setUser] = useState(null);
   const addVideoMutation = useAddVideo();
+  const [modalTask, setModalTask] = useState('');
+  const { modal, toggle } = useModalStore((state) => state);
+  const { id } = useIdStore((state) => state);
+  const navigate = useNavigate();
+
+  const { data: publicUser, isError } = useQuery({
+    queryKey: ['publicUser', id],
+    queryFn: () => selectEqUser(id)
+  });
+
+  if (isError) {
+    userLogout();
+    navigate('/login');
+    return;
+  }
+
+  if (!publicUser) {
+    navigate('/login');
+    return;
+  }
+
+  if (publicUser[0]?.selection) {
+    alert('설문을 완료하지 않아 추천할 수 있는 영상이 없습니다. \n 설문 페이지로 이동합니다.');
+    navigate('/survey');
+  }
 
   const searchVideos = async (e) => {
     e.preventDefault();
@@ -28,7 +57,7 @@ const MainPage = () => {
   const handleAddVideo = (video) => {
     const videoLike = {
       ...video,
-      video_like: user.id
+      video_like: id
     };
     try {
       if (!toast.isActive('addVideo')) {
@@ -42,18 +71,9 @@ const MainPage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    fetchUser();
-  }, []);
-
   return (
     <div>
+      {modal ? <Modal modalTask={modalTask} /> : null}
       <ToastContainer className="mt-12" position="top-right" />
       <form onSubmit={searchVideos}>
         <h1 className="flex justify-center font-bold">YouTube Video Search</h1>

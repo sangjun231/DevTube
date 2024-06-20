@@ -20,9 +20,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep }) => {
 
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      topics: checked
-        ? [...prevAnswers.topics, value]
-        : prevAnswers.topics.filter((topic) => topic !== value),
+      topics: checked ? [...prevAnswers.topics, value] : prevAnswers.topics.filter((topic) => topic !== value)
     }));
     //console.log(answers)
   };
@@ -46,26 +44,26 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep }) => {
 
   const onSubmitSurvey = async (e) => {
     e.preventDefault();
-  
+
     if (!answers.level) {
       alert('추천받고 싶은 영상의 난이도를 선택해주세요');
       return;
     }
-  
+
     if (answers.topics.length === 0) {
       alert('추천받고 싶은 영상의 키워드를 선택해주세요');
       return;
     }
-  
+
     setAnswers({ ...answers });
     console.log('제출할 데이터 준비', answers);
-  
+
     try {
       const userAnswer = await surveyApi(answers);
       console.log('제출용 answers', answers);
       toast.success('답변이 제출되었습니다.');
-      localStorage.setItem('answers', JSON.stringify(answers));
-  
+      /* localStorage.setItem('answers', JSON.stringify(answers)); */
+
       onNext(answers);
     } catch (e) {
       console.error('Error submitting survey:', e.message);
@@ -80,7 +78,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep }) => {
   //   if (savedAnswers) {
   //     setAnswers(savedAnswers);
   //   }
-  // }, []); 
+  // }, []);
 
   return (
     <div className="flex flex-col items-center justify-center">
