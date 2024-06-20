@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { surveyApi } from '../../lib/supabase/surveyApi';
 import { toast } from 'react-toastify';
 import userDataStore from '../../zustand/usreDataStore';
-import { getUser } from '../../lib/supabase/userApi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) => {

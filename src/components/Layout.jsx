@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/supabase';
 import { getAuthSession, getAuthUser, selectEqUser, userLogout } from '../lib/supabase/userApi';
-import Modal from './Modal';
-import useModalStore from '../zustand/modalStore';
 import { useQuery } from '@tanstack/react-query';
 import useIsLoginStore from '../zustand/isLoginStore';
+import useIdStore from '../zustand/idStore';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);
@@ -94,11 +93,9 @@ function FooterItem({ to, children }) {
 }
 
 const Layout = () => {
-  const [id, setId] = useState(null);
+  const { setId } = useIdStore((state) => state);
   const [nickname, setNickname] = useState(null);
-  const [modalTask, setModalTask] = useState('');
   const navigate = useNavigate();
-  const { modal, toggle } = useModalStore((state) => state);
   const { setIsLogin } = useIsLoginStore((state) => state);
 
   const showNickname = async () => {
@@ -109,13 +106,6 @@ const Layout = () => {
       navigate('/login');
       return;
     }
-    /* 세션 존재 여부 검사 ,  */
-    /* if (authUser === null) {
-      setIsLogin(false);
-      await userLogout();
-      navigate('/login');
-      return;
-    } */
     if (authUser) {
       const { data, error } = await selectEqUser(authUser?.id);
       if (error) {
@@ -157,7 +147,6 @@ const Layout = () => {
 
   return (
     <>
-      {modal ? <Modal modalTask={modalTask} /> : null}
       <NavBar>
         <NavItem to={() => {}}>
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
@@ -175,7 +164,6 @@ const Layout = () => {
           </button>
         </div>
       </NavBar>
-
       <div className="px-8 py-24">
         <Outlet />
       </div>

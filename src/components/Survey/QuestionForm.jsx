@@ -3,10 +3,14 @@ import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
 import { useQuery } from '@tanstack/react-query';
-import { getUser } from '../../lib/supabase/userApi';
+import { getAuthSession, getAuthUser, userLogout } from '../../lib/supabase/userApi';
 import { ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import useIsLoginStore from '../../zustand/isLoginStore';
 
 const QuestionForm = () => {
+  const navigate = useNavigate();
+  const { setIsLogin } = useIsLoginStore((state) => state);
   const [answers, setAnswers] = useState({
     isMajor: '',
     level: '',
@@ -21,14 +25,27 @@ const QuestionForm = () => {
     error
   } = useQuery({
     queryKey: ['userInfo'],
-    queryFn: getUser,
+    queryFn: getAuthUser,
     enabled: !!localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'),
     retry: false
   });
 
-  if (isPending) {
-    return <div>로딩중</div>;
-  }
+  const pendingRedirect = async () => {
+    if (isPending) {
+      const { data } = await getAuthSession();
+      if (!data.session) {
+        setIsLogin(false);
+        userLogout();
+        navigate('/login');
+        return;
+      }
+      return <div>로딩중</div>;
+    }
+  }; //
+
+  useEffect(() => {
+    pendingRedirect();
+  }, []);
 
   if (isError) {
     return <div>`유저의 정보를 불러 올 수 없습니다.${error}`</div>;

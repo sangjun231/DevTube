@@ -1,41 +1,44 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import logo from '../assets/Devtube_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { userLogin } from '../lib/supabase/userApi';
-import useModalStore from '../zustand/modalStore';
-import Modal from '../components/Modal';
 import useIsLoginStore from '../zustand/isLoginStore';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 export default function Login() {
   const navigate = useNavigate();
-
   const emailRef = useRef('');
   const passwordRef = useRef('');
-  const [modalTask, setModalTask] = useState('');
   const { setIsLogin } = useIsLoginStore((state) => state);
-  const { modal, toggle } = useModalStore((state) => state);
+  const emailRegex = new RegExp('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$');
 
   const handleLogInClick = async (e) => {
     e.preventDefault();
     if (!emailRef.current.value || !passwordRef.current.value) {
-      toggle();
-      setModalTask('아이디와 비밀번호를 모두 입력하세요.');
+      toast.error('이메일과 비밀번호를 입력해주세요');
+      return;
+    }
+    if (!emailRegex.test(emailRef.current.value)) {
+      toast.error('올바른 이메일 형식이 아닙니다');
       return;
     }
     if (!(passwordRef.current.value.length >= 6 && passwordRef.current.value.length <= 14)) {
-      toggle();
-      setModalTask('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
+      toast.error('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
       return;
     }
 
-    const { data, error } = await userLogin({ email: emailRef.current.value, password: passwordRef.current.value });
-    if (error) {
-      toggle();
-      setModalTask(`로그인 실패. 유저 정보를 불러오지 못했습니다. \n 아이디 또는 비밀번호를 확인해주세요.`);
+    const response = await userLogin({ email: emailRef.current.value, password: passwordRef.current.value });
+    if (response.error) {
+      toast.error(`로그인 실패! 아이디 또는 비밀번호를 확인해주세요.`);
+      return;
+    }
+    if (!response) {
+      toast.error(`로그인 실패! 아이디 또는 비밀번호를 확인해주세요.`);
       return;
     }
 
-    if (data) {
+    if (response.data) {
       setIsLogin(true);
       navigate('/');
       return;
@@ -48,7 +51,7 @@ export default function Login() {
 
   return (
     <>
-      {modal ? <Modal modalTask={modalTask} /> : null}
+      <ToastContainer className="mt-12" position="top-right" autoClose="1000" hideProgressBar="true" />
       <div className="flex h-screen items-center justify-center">
         <div className="flex min-w-96 flex-col items-center justify-center gap-12 bg-bgDev p-12">
           <div className="flex w-full flex-col items-center justify-center gap-5">

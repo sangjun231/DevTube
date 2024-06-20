@@ -1,13 +1,18 @@
 import { ToastContainer, toast } from 'react-toastify';
 import { useVideos, useDeleteVideo } from '../lib/supabase/videoApi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase/supabase';
+import useIdStore from '../zustand/idStore';
+import { updateUserNickname } from '../lib/supabase/userApi';
 
 const MyPage = () => {
   const [user, setUser] = useState(null);
   const { data: videos, error: fetchError, isLoading } = useVideos();
   const deleteVideoMutation = useDeleteVideo();
+  const { id } = useIdStore((state) => state);
+  const [nickname, setNickname] = useState('');
+  const navigate = useNavigate();
 
   const likeVideos = videos ? videos.filter((video) => video.video_like === user?.id) : [];
 
@@ -20,6 +25,18 @@ const MyPage = () => {
     }
   };
 
+  const updateNickname = async (value, userId) => {
+    const { data, error } = await updateUserNickname(value, userId);
+    if (error) {
+      toast.error('닉네임 변경에 실패했습니다. 다시 로그인하시길 바랍니다.');
+      return;
+    }
+    if (data) {
+      navigate(0);
+      return;
+    }
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -27,7 +44,6 @@ const MyPage = () => {
       } = await supabase.auth.getUser();
       setUser(user);
     };
-
     fetchUser();
   }, []);
 
@@ -46,10 +62,21 @@ const MyPage = () => {
         <h2 className="mb-4">프로필 수정</h2>
         <div className="mb-4">
           <label className="mb-2 block">닉네임</label>
-          <input className="box-border w-full p-2" type="text" placeholder="nickname" />
+          <input
+            className="box-border w-full p-2"
+            type="text"
+            placeholder="닉네임을 입력해주세요"
+            value={nickname}
+            onChange={(e) => {
+              setNickname(e.target.value);
+            }}
+          />
         </div>
         <div className="flex gap-20">
-          <button className="mb-2 flex w-full cursor-pointer items-center justify-center rounded border-none bg-customBlue p-2 text-white no-underline hover:underline">
+          <button
+            className="mb-2 flex w-full cursor-pointer items-center justify-center rounded border-none bg-customBlue p-2 text-white no-underline hover:underline"
+            onClick={() => updateNickname(nickname, id)}
+          >
             프로필 업데이트
           </button>
           <Link

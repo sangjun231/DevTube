@@ -11,11 +11,14 @@ export const userRegist = async ({ email, password }) => {
 }; // 회원가입
 
 export const userLogin = async ({ email, password }) => {
+  const response = await supabase.from('users').select('*').eq('email', email);
+  if (!response?.data?.length) {
+    return;
+  }
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
-
   return { data, error };
 }; // 일반 로그인
 
@@ -65,3 +68,8 @@ export const selectEqUser = async (authId) => {
   const { data, error } = await supabase.from('users').select('*').eq('id', authId).single();
   return { data, error };
 }; // 고유 ID가 일치하는 사용자 정보 SELECT
+
+export const updateUserNickname = async (nickname, userId) => {
+  const { data, error } = await supabase.from('users').update({ nickname: nickname }).eq('id', userId).select();
+  return { data, error };
+}; // 고유 ID가 일치하는 사용자 닉네임 UPDATE

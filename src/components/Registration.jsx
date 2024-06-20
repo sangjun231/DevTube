@@ -1,14 +1,12 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { addUser, userLogin, userRegist } from '../lib/supabase/userApi';
-import useModalStore from '../zustand/modalStore';
-import Modal from './Modal';
 import useIsLoginStore from '../zustand/isLoginStore';
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const Registration = () => {
-  const { modal, toggle } = useModalStore((state) => state);
   const navigate = useNavigate();
-  const [modalTask, setModalTask] = useState('');
   const { setIsLogin } = useIsLoginStore((state) => state);
   const email = useRef('');
   const nickname = useRef('');
@@ -20,26 +18,22 @@ const Registration = () => {
     e.preventDefault();
 
     if (!email.trim() || !nickname.trim() || !password.trim()) {
-      toggle();
-      setModalTask('회원가입 양식에 맞게 입력해 주세요');
+      toast.error('회원가입 양식에 맞게 입력해 주세요');
       return;
     }
 
     if (!emailRegex.test(email)) {
-      toggle();
-      setModalTask('올바른 이메일 형식이 아닙니다');
+      toast.error('올바른 이메일 형식이 아닙니다');
       return;
     }
 
     if (!(nickname.length >= 4 && nickname.length <= 10)) {
-      toggle();
-      setModalTask('닉네임은 4자리 이상, 10자리 이하여야 합니다.');
+      toast.error('닉네임은 4자리 이상, 10자리 이하여야 합니다.');
       return;
     }
 
     if (!(password.length >= 6 && password.length <= 14)) {
-      toggle();
-      setModalTask('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
+      toast.error('비밀번호는 6자리 이상, 14자리 이하여야 합니다.');
       return;
     }
 
@@ -48,8 +42,7 @@ const Registration = () => {
     const registRes = await userRegist({ email, password });
 
     if (registRes?.error) {
-      toggle();
-      setModalTask('회원가입이 완료되지 않았습니다. 다시 시도하세요');
+      toast.error('회원가입이 완료되지 않았습니다. 다시 시도하세요');
       return;
     }
 
@@ -60,8 +53,7 @@ const Registration = () => {
     });
 
     if (addUserRes.error) {
-      toggle();
-      setModalTask('회원가입 절차에 문제가 발생했습니다. 다시 시도하세요');
+      toast.error('회원가입 절차에 문제가 발생했습니다. 다시 시도하세요');
       return;
     }
 
@@ -73,7 +65,7 @@ const Registration = () => {
 
   return (
     <>
-      {modal ? <Modal modalTask={modalTask} /> : null}
+      <ToastContainer className="mt-12" position="top-right" autoClose="1000" hideProgressBar="true" />
       <form className="flex min-w-96 flex-col items-center justify-center gap-12 bg-bgDev p-12">
         <h1 className="text-xl font-bold">회원가입</h1>
         <div className="flex w-full flex-col items-center justify-center gap-5">

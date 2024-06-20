@@ -2,19 +2,12 @@ import { useEffect, useState } from 'react';
 import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
 import { ToastContainer, toast } from 'react-toastify';
-import { useQuery } from '@tanstack/react-query';
-import { selectEqUser, userLogout } from '../lib/supabase/userApi';
-import useIdStore from '../zustand/isLoginStore';
-import { useNavigate } from 'react-router-dom';
-import useModalStore from '../zustand/modalStore';
-import Modal from '../components/Modal';
+import { supabase } from '../lib/supabase/supabase';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const addVideoMutation = useAddVideo();
-  const [modalTask, setModalTask] = useState('');
-  const { modal, toggle } = useModalStore((state) => state);
 
   const searchVideos = async (e) => {
     e.preventDefault();
@@ -64,14 +57,15 @@ const MainPage = () => {
           data: { user }
         } = await supabase.auth.getUser();
         const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
-        const selectionQuery = `${data.selection.level} ${data.selection.topics}`;
+        if (error) {
+          throw error;
+        }
+        const selectionQuery = `${data?.selection?.level} ${data?.selection?.topics}`;
 
         setUser(user);
         setQuery(selectionQuery);
         await surveyVideos(selectionQuery);
-      } catch (error) {
-        console.error('Error in fetchUserAndSelection:', error);
-      }
+      } catch (error) {}
     };
 
     fetchUserAndSelection();
@@ -79,7 +73,6 @@ const MainPage = () => {
 
   return (
     <div>
-      {modal ? <Modal modalTask={modalTask} /> : null}
       <ToastContainer className="mt-12" position="top-right" />
       <form onSubmit={searchVideos}>
         <h1 className="flex justify-center font-bold">YouTube Video Search</h1>
