@@ -27,7 +27,10 @@ function TopButton() {
 
   return (
     showButton && (
-      <div id="scroll__container" className="z-20 mr-6 size-24 scale-75">
+      <div
+        id="scroll__container"
+        className="fixed bottom-16 right-8 flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-white"
+      >
         <button id="top" onClick={scrollToTop} type="button">
           <img className="h-20 w-20" src="img/topbutton.png" alt="topbutton_img" />
         </button>
@@ -71,7 +74,7 @@ function NavSurveyItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -89,6 +92,26 @@ const Layout = () => {
   const [session, setSession] = useState(null);
   const [nickname, setNickname] = useState(null);
   const navigate = useNavigate();
+
+  const fetchUserProfile = async (id) => {
+    const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
+
+    if (error) {
+      console.error('닉네임 정보를 받아올 수 없습니다', error);
+    } else {
+      setNickname(data.nickname);
+    }
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!confirm('로그아웃 하시겠습니까?')) return;
+    if (error) console.error('로그아웃에 실패하였습니다', error);
+    else {
+      alert('로그아웃 되었습니다.');
+      navigate('/login');
+    }
+  };
 
   useEffect(() => {
     const loadSession = async () => {
@@ -118,29 +141,7 @@ const Layout = () => {
       authListener.subscription.unsubscribe();
     };
   }, []);
-  const fetchUserProfile = async (id) => {
-    const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
 
-    if (error) {
-      console.error('닉네임 정보를 받아올 수 없습니다', error);
-    } else {
-      setNickname(data.nickname);
-    }
-  };
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!confirm('로그아웃 하시겠습니까?')) return;
-    if (error) console.error('로그아웃에 실패하였습니다', error);
-    else {
-      alert('로그아웃 되었습니다.');
-      navigate('/login');
-    }
-  };
-
-  // useEffect(() => {
-  //   if (nickname) console.log(nickname);
-  // }, [nickname]);
   return (
     <>
       <NavBar>
