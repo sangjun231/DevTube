@@ -2,24 +2,41 @@ import { useEffect, useState } from 'react';
 import SurveyForm from './SurveyForm';
 import RecommendationForm from './RecommendationForm';
 import AnswerSubmit from './AnswerSubmit';
-import { getAuthUser } from '../../lib/supabase/userApi';
-import userDataStore from '../../zustand/usreDataStore';
+import { useQuery } from '@tanstack/react-query';
+import { getUser } from '../../lib/supabase/userApi';
+import { ToastContainer } from 'react-toastify';
 
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({
-    userId: '',
     isMajor: '',
     level: '',
     topics: []
   });
-  const [step, setStep] = useState('사전배경입력');
-  // const [user, setUser] = useState('');
-  // const [getUserId, setGetUserIdData] = useState('');
-  const { user, setUser, userIdData, setUserIdData } = userDataStore();
+  const [step, setStep] = useState('사전배경');
+
+  const {
+    data: userData,
+    isPending,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getUser,
+    enabled: !!localStorage.getItem('sb-mrinvkeutvuswhnzkglk-auth-token'),
+    retry: false
+  });
+
+  if (isPending) {
+    return <div>로딩중</div>;
+  }
+
+  if (isError) {
+    return <div>`유저의 정보를 불러 올 수 없습니다.${error}`</div>;
+  }
 
   const onNextSurvey = (data) => {
     setAnswers({ ...answers, ...data });
-    setStep('요구사항입력');
+    setStep('관심사');
   };
 
   const onRecommendationNext = (data) => {
@@ -27,47 +44,23 @@ const QuestionForm = () => {
     setStep('답변제출');
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const userData = await getAuthUser();
-        setUser(userData);
-        setUserIdData(userData.id);
-        console.log('userId 값 확인', userData.id);
-
-        if (userData.id) {
-          const selection = {};
-
-          setAnswers({
-            userId: userData.id,
-            isMajor: selection.isMajor || '',
-            level: selection.level || '',
-            topics: selection.topics || []
-          });
-
-          console.log('저장한 상태 데이터(QuestionForm)', {
-            userId: userData.id,
-            isMajor: selection.isMajor || '',
-            level: selection.level || '',
-            topics: selection.topics || []
-          });
-        }
-      } catch (e) {
-        console.log('데이터 받아오기 오류', e.message);
-      }
-    };
-
-    getData();
-  }, []);
-
   return (
-    <div className="flex items-center justify-center">
-      {step === '사전배경입력' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
-      {step === '요구사항입력' && (
-        <RecommendationForm onNext={onRecommendationNext} setStep={setStep} answers={answers} setAnswers={setAnswers} />
-      )}
-      {step === '답변제출' && <AnswerSubmit setStep={setStep} answers={answers} />}
-    </div>
+    <>
+      <ToastContainer className="mt-12" position="top-right" autoClose="1000" hideProgressBar="true" />
+      <div className="flex items-center justify-center">
+        {step === '사전배경' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
+        {step === '관심사' && (
+          <RecommendationForm
+            onNext={onRecommendationNext}
+            setStep={setStep}
+            answers={answers}
+            setAnswers={setAnswers}
+            userId={userData.id}
+          />
+        )}
+        {step === '답변제출' && <AnswerSubmit setStep={setStep} answers={answers} setAnswers={setAnswers} />}
+      </div>
+    </>
   );
 };
 

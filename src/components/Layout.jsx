@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/supabase';
 import { getAuthSession, getAuthUser, selectEqUser, userLogout } from '../lib/supabase/userApi';
 import Modal from './Modal';
@@ -32,7 +32,10 @@ function TopButton() {
 
   return (
     showButton && (
-      <div id="scroll__container" className="z-20 mr-6 size-24 scale-75">
+      <div
+        id="scroll__container"
+        className="fixed bottom-16 right-8 flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-white"
+      >
         <button id="top" onClick={scrollToTop} type="button">
           <img className="h-20 w-20" src="img/topbutton.png" alt="topbutton_img" />
         </button>
@@ -56,6 +59,21 @@ function NavItem({ to, children }) {
     <Link to={to} className="left-0 right-0 top-0 mx-2 text-white no-underline hover:underline">
       {children}
     </Link>
+  );
+}
+
+function NavSurveyItem({ to, children }) {
+  const location = useLocation();
+
+  // 현재 경로가 "/survey"가 아닌 경우에만 활성화
+  const isActive = location.pathname !== '/survey';
+
+  return isActive ? (
+    <Link to={to} className="left-0 right-0 top-0 mx-2 text-white no-underline hover:underline">
+      {children}
+    </Link>
+  ) : (
+    <></>
   );
 }
 

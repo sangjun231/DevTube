@@ -18,6 +18,10 @@ const MainPage = () => {
 
   const searchVideos = async (e) => {
     e.preventDefault();
+    await surveyVideos(query);
+  };
+
+  const surveyVideos = async (query) => {
     try {
       const youtubeVideos = await searchYouTubeVideos(query);
       setSearchResults(
@@ -32,6 +36,11 @@ const MainPage = () => {
   };
 
   const handleAddVideo = (video) => {
+    if (!user) {
+      toast.error('로그인이 필요합니다.');
+      return;
+    }
+
     const videoLike = {
       ...video,
       video_like: id
@@ -47,6 +56,26 @@ const MainPage = () => {
       console.error('Error adding video:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchUserAndSelection = async () => {
+      try {
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+        const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
+        const selectionQuery = `${data.selection.level} ${data.selection.topics}`;
+
+        setUser(user);
+        setQuery(selectionQuery);
+        await surveyVideos(selectionQuery);
+      } catch (error) {
+        console.error('Error in fetchUserAndSelection:', error);
+      }
+    };
+
+    fetchUserAndSelection();
+  }, []);
 
   return (
     <div>
