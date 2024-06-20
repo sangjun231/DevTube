@@ -71,12 +71,10 @@ const MainPage = () => {
           data: { user }
         } = await supabase.auth.getUser();
         if (!user) {
-          toast.error('로그인이 필요합니다.');
           return;
         }
         const { data, error } = await supabase.from('users').select('selection').eq('id', user.id).single();
         if (error || !data) {
-          toast.error('설문조사를 완료해야 합니다.');
           return;
         }
 
@@ -86,7 +84,6 @@ const MainPage = () => {
         searchVideos(selectionQuery, '', true); // Reset results and search
       } catch (error) {
         console.error('Error in fetchUserAndSelection:', error);
-        toast.error('사용자 정보를 가져오는 중 오류가 발생했습니다.');
       }
     };
 
