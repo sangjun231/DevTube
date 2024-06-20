@@ -21,12 +21,7 @@ const AnswerSubmit = ({ answers }) => {
         className="mt-10 w-60 rounded-lg bg-black px-4 py-2 font-semibold text-white shadow-md"
         onClick={() => {
           navigate('/');
-          alert(JSON.stringify(answers));
         }}
-        // 24.06.19
-        // 임의로 alert 달았어용
-        // 24.06.20
-        // alert에 answers 띄워봄
       >
         영상보러 가기
       </button>
