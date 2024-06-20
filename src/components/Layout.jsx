@@ -56,7 +56,7 @@ function NavItem({ to, children }) {
 
 function Footer({ children }) {
   return (
-    <div className="bg-customGray fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between px-4 py-2 text-white">
+    <div className="fixed bottom-0 left-0 right-0 z-10 mx-auto flex w-full justify-between bg-customGray px-4 py-2 text-white">
       {children}
     </div>
   );
@@ -123,9 +123,6 @@ const Layout = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (nickname) console.log(nickname);
-  // }, [nickname]);
   return (
     <>
       <NavBar>
