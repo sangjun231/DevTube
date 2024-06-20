@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/supabase';
 
 function TopButton() {
@@ -53,6 +53,21 @@ function NavItem({ to, children }) {
     </Link>
   );
 }
+
+function NavSurveyItem({ to, children }) {
+  const location = useLocation();
+
+  // 현재 경로가 "/survey"가 아닌 경우에만 활성화
+  const isActive = location.pathname !== '/survey';
+
+  return isActive ? (
+    <Link to={to} className='left-0 right-0 top-0 mx-2 text-white no-underline hover:underline'>
+    {children}
+  </Link>
+  ) : (
+    <></>
+  );
+};
 
 function Footer({ children }) {
   return (
@@ -133,14 +148,14 @@ const Layout = () => {
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
-          <Link to="/survey" className="mr-3">
+          <NavSurveyItem to="/survey">
             💡 맞춤 추천
-          </Link>
+          </NavSurveyItem>
           <NavItem to="/profile">마이페이지</NavItem>
           {session ? (
             <span className="mx-2 flex items-center text-white">
               {nickname ? `${nickname}님 반갑습니다` : 'Loading...'}
-              <button onClick={handleLogout} className="mx-2 border text-white no-underline hover:underline">
+              <button onClick={handleLogout} className="mx-3 border text-black bg-gray-100 rounded-md no-underline hover:underline px-3">
                 로그아웃
               </button>
             </span>
