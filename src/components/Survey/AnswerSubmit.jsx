@@ -1,15 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// import logo from '../../assets/Devtube_logo.png'
 
-const AnswerSubmit = ({  answers }) => {
+const AnswerSubmit = ({  answers, setStep }) => {
   const navigate = useNavigate();
   console.log('제출 페이지',answers);
 
   return (
     <div className='flex flex-col text-center items-center'>
       <div className='flex flex-row mt-40'>
-      {/* <img src={logo} alt="DevTube_logo"className='h-full' /> */}
         <div className="flex flex-col items-center justify-center gap-y-2">
           <div className="text text-center font-bold mb-5 text-3xl">답변제출 완료 🙌</div>
           <p className='text-xl'>답변이 제출되었습니다! </p>
@@ -23,7 +21,6 @@ const AnswerSubmit = ({  answers }) => {
       >
         영상보러 가기
       </button>
-      <button className="mt-10 underline" onClick={() => navigate(0)}>질문 답변 다시하기</button>
     </div>
   );
 };

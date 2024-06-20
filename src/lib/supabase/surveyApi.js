@@ -1,25 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
-
-// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL_MY;
-// const supabaseKey = import.meta.env.VITE_SUPABASE_KEY_MY;
-
-// export const supabase = createClient(supabaseUrl, supabaseKey);
+import { toast } from 'react-toastify';
 import { supabase } from './supabase';
 
 export const surveyApi = async (answers) => {
   console.log('객체 잘 받고 있나 확인', answers)
   try {
-    //const userId = '32c50ec5-7438-4735-850f-d3acf8a24193';
-    //const { data: userData, error: userError } = await supabase.from('users').select('id').eq('id', userId);
-    //console.log(userData);
-    //if(userError) {
-      //throw userError;
-    //}
-
-    // if (!userData || userData.length === 0) {
-    //   throw new Error('User not found');
-    // }
-
     const getUserId = answers.userId;
     console.log('유저 아이디 확인용', getUserId);
 
@@ -30,9 +14,11 @@ export const surveyApi = async (answers) => {
     if (error) {
       throw error;
     }
-
+  
     return data;
   } catch (e) {
+    
+    toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요');
     console.log(e.message);
   }
 };

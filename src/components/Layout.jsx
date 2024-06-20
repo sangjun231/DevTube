@@ -81,7 +81,21 @@ const Layout = () => {
   const { modal, toggle } = useModalStore((state) => state);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const loadSession = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      setSession(session);
+      if (session) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setNickname(null);
+      }
+    };
+
+    loadSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
         console.log(session);
@@ -94,9 +108,9 @@ const Layout = () => {
       }
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   const fetchUserProfile = async (id) => {
@@ -114,6 +128,10 @@ const Layout = () => {
     if (error) console.error('로그아웃에 실패하였습니다', error);
     navigate('/login');
   };
+
+  // useEffect(() => {
+  //   if (nickname) console.log(nickname);
+  // }, [nickname]);
   return (
     <>
       {modal ? <Modal modalTask={modalTask} /> : null}
@@ -123,7 +141,7 @@ const Layout = () => {
         </NavItem>
         <div className="align-center flex">
           <Link to="/survey" className="mr-3">
-            survey
+            💡 맞춤 추천
           </Link>
           <NavItem to="/profile">마이페이지</NavItem>
           {session ? (
