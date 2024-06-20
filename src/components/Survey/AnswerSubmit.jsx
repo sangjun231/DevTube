@@ -17,9 +17,7 @@ const AnswerSubmit = ({ answers, setStep, setAnswers }) => {
       <button
         type="button"
         className="mt-10 w-60 rounded-lg bg-black px-4 py-2 font-semibold text-white shadow-md"
-        onClick={() => {
-          navigate('/');
-        }}
+        onClick={() => navigate('/')}
       >
         영상보러 가기
       </button>

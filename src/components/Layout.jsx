@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase/supabase';
+import { getAuthSession, getAuthUser, selectEqUser, userLogout } from '../lib/supabase/userApi';
+import { useQuery } from '@tanstack/react-query';
+import useIsLoginStore from '../zustand/isLoginStore';
+import useIdStore from '../zustand/idStore';
 
 function TopButton() {
   const [showButton, setShowButton] = useState(false);
@@ -64,13 +68,13 @@ function NavSurveyItem({ to, children }) {
   const isActive = location.pathname !== '/survey';
 
   return isActive ? (
-    <Link to={to} className='left-0 right-0 top-0 mx-2 text-white no-underline hover:underline'>
-    {children}
-  </Link>
+    <Link to={to} className="left-0 right-0 top-0 mx-2 text-white no-underline hover:underline">
+      {children}
+    </Link>
   ) : (
     <></>
   );
-};
+}
 
 function Footer({ children }) {
   return (
@@ -89,83 +93,77 @@ function FooterItem({ to, children }) {
 }
 
 const Layout = () => {
-  const [session, setSession] = useState(null);
+  const { setId } = useIdStore((state) => state);
   const [nickname, setNickname] = useState(null);
   const navigate = useNavigate();
+  const { setIsLogin } = useIsLoginStore((state) => state);
 
-  const fetchUserProfile = async (id) => {
-    const { data, error } = await supabase.from('users').select('nickname').eq('id', id).single();
-
-    if (error) {
-      console.error('닉네임 정보를 받아올 수 없습니다', error);
-    } else {
-      setNickname(data.nickname);
-    }
-  };
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!confirm('로그아웃 하시겠습니까?')) return;
-    if (error) console.error('로그아웃에 실패하였습니다', error);
-    else {
-      alert('로그아웃 되었습니다.');
+  const showNickname = async () => {
+    const { data } = await getAuthSession();
+    if (!data.session) {
+      setIsLogin(false);
+      await userLogout();
       navigate('/login');
+      return;
+    }
+    if (authUser) {
+      const { data, error } = await selectEqUser(authUser?.id);
+      if (error) {
+        setIsLogin(false);
+        await userLogout();
+        navigate('/login');
+        return;
+      } else if (data.selection === null) {
+        navigate('/survey');
+      }
+      setId(authUser.id);
+      setNickname(data.nickname);
+      return;
     }
   };
+
+  const { data: authUser, isError } = useQuery({
+    queryKey: ['authUser'],
+    queryFn: getAuthUser
+  });
+
+  if (isError) {
+    setIsLogin(false);
+    userLogout();
+    navigate('/login');
+    return;
+  }
 
   useEffect(() => {
-    const loadSession = async () => {
-      const {
-        data: { session }
-      } = await supabase.auth.getSession();
-      setSession(session);
-      if (session) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setNickname(null);
-      }
-    };
+    showNickname();
+  }, [authUser]);
 
-    loadSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setNickname(null);
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
+  const handleLogout = async () => {
+    setIsLogin(false);
+    await userLogout();
+    navigate('/login');
+    return;
+  };
 
   return (
     <>
       <NavBar>
-        <NavItem to="/">
+        <NavItem to={() => {}}>
           <img className="size-14" src="img/12logo.png" alt="logo_image" />
         </NavItem>
         <div className="align-center flex">
-          <NavSurveyItem to="/survey">
+          <span className="mx-2 flex items-center text-white">
+            {nickname ? `${nickname}님 반갑습니다` : 'Loading...'}
+          </span>
+          <Link to="/survey" className="mr-3">
             💡 맞춤 추천
-          </NavSurveyItem>
+          </Link>
           <NavItem to="/profile">마이페이지</NavItem>
-          {session ? (
-            <span className="mx-2 flex items-center text-white">
-              {nickname ? `${nickname}님 반갑습니다` : 'Loading...'}
-              <button onClick={handleLogout} className="mx-3 border text-black bg-gray-100 rounded-md no-underline hover:underline px-3">
-                로그아웃
-              </button>
-            </span>
-          ) : (
-            <NavItem to="/login">로그인</NavItem>
-          )}
+          <button onClick={handleLogout} className="mx-3 border text-black bg-gray-100 rounded-md no-underline hover:underline px-3">
+            로그아웃
+          </button>
         </div>
       </NavBar>
-
       <div className="px-8 py-24">
         <Outlet />
       </div>

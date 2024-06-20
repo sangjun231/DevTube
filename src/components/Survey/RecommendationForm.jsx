@@ -3,16 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { surveyApi } from '../../lib/supabase/surveyApi';
 import { toast } from 'react-toastify';
 import userDataStore from '../../zustand/usreDataStore';
-import { getUser } from '../../lib/supabase/userApi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
   // const [level, setLevel] = useState('');
   // const [topics, setTopics] = useState([]);
   // console.log('여기는 recommendation', answers);
-  const { user, setUser, userIdData, setUserIdData } = userDataStore();
   const navigate = useNavigate();
-  
+
   const topics = [
     'HTML',
     'CSS',
@@ -22,7 +20,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     'JavaScript',
     'React',
     'TypeScript',
-    'next.js',
+    'Next.js ',
     'Vue.js',
     'Redux Toolkit',
     'Zustand',
@@ -32,9 +30,8 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     'Nuxt.js'
   ];
 
-
   const recommendMutation = useMutation({
-    mutationFn: async ({answers, userId}) => await surveyApi({answers, userId}),
+    mutationFn: async ({ answers, userId }) => await surveyApi({ answers, userId }),
     onSuccess: () => {
       localStorage.setItem('answers', JSON.stringify(answers));
       onNext(answers);
@@ -44,7 +41,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
       toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요.');
       navigate(0);
     }
-  })
+  });
 
   const onTopicChange = (e) => {
     const { value, checked } = e.target;
@@ -75,26 +72,23 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     setAnswers(answers);
     console.log('제출할 데이터 준비', answers);
 
-//    const userId = userId;
-    console.log(userId)
-    recommendMutation.mutate({answers, userId})
+    //    const userId = userId;
+    console.log(userId);
+    recommendMutation.mutate({ answers, userId });
 
     // try {
-    //   
+    //
 
     //   await surveyApi({ answers, userId });
     //   localStorage.setItem('answers', JSON.stringify(answers));
     //   onNext(answers);
 
-      
     // } catch (e) {
     //   console.error('답변 제출에 실패:', e.message);
     // //  toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요.');
     //   navigate(0);
     // }
   };
-
-  
 
   return (
     <>
@@ -122,9 +116,9 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
             </button>
           </form>
         </div>
-        <button className="mt-4 underline  cursor-pointer" onClick={() => setStep('사전배경')}>
-        이전으로
-      </button>
+        <button className="mt-4 cursor-pointer underline" onClick={() => setStep('사전배경')}>
+          이전으로
+        </button>
       </div>
     </>
   );

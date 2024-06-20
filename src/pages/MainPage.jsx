@@ -50,7 +50,7 @@ const MainPage = () => {
 
     const videoLike = {
       ...video,
-      video_like: user.id
+      video_like: id
     };
     try {
       if (!toast.isActive('addVideo')) {
