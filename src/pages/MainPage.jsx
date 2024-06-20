@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase/supabase';
-
+import { useAddVideo } from '../lib/supabase/videoApi';
 import { searchYouTubeVideos } from '../lib/api/youtubeAPI';
+import { ToastContainer, toast } from 'react-toastify';
+import { supabase } from '../lib/supabase/supabase';
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
@@ -71,11 +72,31 @@ const MainPage = () => {
   }, []);
 
   return (
-    <>
+    <div>
+      <ToastContainer className="mt-12" position="top-right" />
+      <form onSubmit={searchVideos}>
+        <h1 className="mb-5 flex justify-center font-['DungGeunMo'] text-6xl">DevTube</h1>
+        <h2 className="mb-5 flex justify-center font-['DungGeunMo'] text-xl">더 많은 내용을 검색하세요!</h2>
+        <div className="mb-8 flex items-center justify-center">
+          <input
+            autoFocus
+            className="mb-2 box-border rounded border-2 p-1"
+            type="text"
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="오늘은 무슨 공부를 할까?"
+          />
+          <button
+            className="border-3 mb-2 ml-4 flex cursor-pointer items-center justify-center rounded bg-yellow-300 p-2 text-sm font-bold text-black no-underline hover:underline"
+            type="submit"
+          >
+            Search
+          </button>
+        </div>
+      </form>
       <div className="grid grid-cols-3 gap-4">
-        {selectionVideos.map((video) => (
+        {searchResults.map((video) => (
           <div key={video.video_id}>
-            <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="w-full truncate"></h3>
+            <h3 dangerouslySetInnerHTML={{ __html: video.video_title }} className="mb-2 w-full truncate font-bold"></h3>
             <div className="aspect-h-9 aspect-w-16">
               <iframe
                 className="h-full w-full"
@@ -84,10 +105,13 @@ const MainPage = () => {
                 allowFullScreen
               ></iframe>
             </div>
+            <button className="mt-2 font-bold text-green-500" onClick={() => handleAddVideo(video)}>
+              Save
+            </button>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
