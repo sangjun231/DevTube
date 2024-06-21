@@ -40,15 +40,6 @@ export const getAuthSession = async () => {
   return { data, error };
 }; // auth 사용자 세션 정보 SELECT
 
-/* export const getIdFromAuthSession = async () => {
-  const { data, error } = await getAuthSession();
-  if (error) {
-    console.log(error);
-    return;
-  }
-  return data?.user?.id;
-}; */
-
 /* ------------------------------------------------------------------------ */
 
 /* public schema users table api */
