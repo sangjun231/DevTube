@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-const SurveyForm = ({ answers, setAnswers, onNext }) => {
+const QuestionForm = ({ answers, setAnswers, onNext }) => {
   const onChange = (e) => {
     const { name, value } = e.target;
     setAnswers((prevAnswers) => ({
@@ -9,7 +9,7 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onNextSubmit = (e) => {
     e.preventDefault();
 
     if (!answers.isMajor || !answers.level) {
@@ -28,7 +28,7 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
           몇 가지 간단한 질문에 답변해주시면, <br />
           알맞은 영상을 추천해드릴게요!
         </p>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onNextSubmit}>
           <div className="mb-4 flex items-center justify-between rounded-2xl border-2 border-solid border-gray-400 p-4">
             <label className="mr-4 block text-lg font-medium">전공자이신가요?</label>
             <div className="flex space-x-4">
@@ -114,4 +114,4 @@ const SurveyForm = ({ answers, setAnswers, onNext }) => {
   );
 };
 
-export default SurveyForm;
+export default QuestionForm;

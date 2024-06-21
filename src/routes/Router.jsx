@@ -4,7 +4,7 @@ import MyPage from '../pages/MyPage';
 import Layout from '../components/Layout';
 import Auth from '../pages/Auth';
 import Login from '../pages/Login';
-import QuestionForm from '../pages/QuestionForm';
+import Survey from '../pages/Survey';
 
 
 const Router = createBrowserRouter([
@@ -24,7 +24,7 @@ const Router = createBrowserRouter([
   },
   {
     path: '/survey',
-    element: <QuestionForm />
+    element: <Survey />
   },
   {
     path: '/login',
