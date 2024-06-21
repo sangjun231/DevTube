@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 const AnswerSubmit = ({ setStep, setAnswers }) => {
   const navigate = useNavigate();
 
+  const onBackStep = () => {
+    setStep('관심사');
+    setAnswers((prevAnswers) => ({ ...prevAnswers, topics: [] }));
+  }
+
   return (
     <div className="flex flex-col items-center text-center">
       <div className="flex flex-row">
@@ -21,10 +26,7 @@ const AnswerSubmit = ({ setStep, setAnswers }) => {
       </button>
       <button
         className="mt-8 cursor-pointer underline"
-        onClick={() => {
-          setStep('관심사');
-          setAnswers((prevAnswers) => ({ ...prevAnswers, topics: [] }));
-        }}
+        onClick={onBackStep}
       >
         이전으로
       </button>
