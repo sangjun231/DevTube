@@ -37,7 +37,7 @@ const MainPage = () => {
     setLoading(false);
   };
 
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     searchVideos(query, '', true);
   };
@@ -81,7 +81,7 @@ const MainPage = () => {
         const selectionQuery = `${data.selection.level} ${data.selection.topics.join('|')}`;
         setUser({ ...user, selection: data.selection });
         setQuery(selectionQuery);
-        searchVideos(selectionQuery, '', true); // Reset results and search
+        searchVideos(selectionQuery, '', true);
       } catch (error) {
         console.error('Error in fetchUserAndSelection:', error);
       }
