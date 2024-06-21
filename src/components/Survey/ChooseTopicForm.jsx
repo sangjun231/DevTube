@@ -3,7 +3,7 @@ import { surveyApi } from '../../lib/supabase/surveyApi';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 
-const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
+const ChooseTopicForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
   const navigate = useNavigate();
 
   const topics = [
@@ -25,13 +25,12 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     'Nuxt.js'
   ];
 
-  const recommendMutation = useMutation({
+  const chooseTopicMutation = useMutation({
     mutationFn: async ({ answers, userId }) => await surveyApi({ answers, userId }),
     onSuccess: () => {
       onNext(answers);
     },
     onError: (e) => {
-      console.error('답변 제출에 실패:', e.message);
       toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요.');
       navigate(0);
     }
@@ -64,10 +63,7 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
     }
 
     setAnswers(answers);
-    console.log('제출할 데이터 준비', answers);
-
-    console.log(userId);
-    recommendMutation.mutate({ answers, userId });
+    chooseTopicMutation.mutate({ answers, userId });
   };
 
   return (
@@ -104,4 +100,4 @@ const RecommendationForm = ({ answers, setAnswers, onNext, setStep, userId }) =>
   );
 };
 
-export default RecommendationForm;
+export default ChooseTopicForm;

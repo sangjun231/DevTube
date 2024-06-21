@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import SurveyForm from '../components/Survey/SurveyForm';
-import RecommendationForm from '../components/Survey/RecommendationForm';
 import AnswerSubmit from '../components/Survey/AnswerSubmit';
 import { useQuery } from '@tanstack/react-query';
 import { getAuthSession, getAuthUser, userLogout } from '../lib/supabase/userApi';
 import { useNavigate } from 'react-router-dom';
 import useIsLoginStore from '../zustand/isLoginStore';
+import ChooseTopicForm from '../components/Survey/ChooseTopicForm';
+import QuestionForm from '../components/Survey/QuestionForm';
 
-const QuestionForm = () => {
+const Survey = () => {
   const navigate = useNavigate();
   const { setIsLogin } = useIsLoginStore((state) => state);
   const [answers, setAnswers] = useState({
@@ -40,7 +40,7 @@ const QuestionForm = () => {
       }
       return <div>로딩중</div>;
     }
-  }; //
+  };
 
   useEffect(() => {
     pendingRedirect();
@@ -55,7 +55,7 @@ const QuestionForm = () => {
     setStep('관심사');
   };
 
-  const onRecommendationNext = (data) => {
+  const onChooseTopicNext = (data) => {
     setAnswers({ ...answers, ...data });
     setStep('답변제출');
   };
@@ -63,10 +63,10 @@ const QuestionForm = () => {
   return (
     <>
       <div className="flex h-screen items-center justify-center">
-        {step === '사전배경' && <SurveyForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
+        {step === '사전배경' && <QuestionForm onNext={onNextSurvey} answers={answers} setAnswers={setAnswers} />}
         {step === '관심사' && (
-          <RecommendationForm
-            onNext={onRecommendationNext}
+          <ChooseTopicForm
+            onNext={onChooseTopicNext}
             setStep={setStep}
             answers={answers}
             setAnswers={setAnswers}
@@ -79,4 +79,4 @@ const QuestionForm = () => {
   );
 };
 
-export default QuestionForm;
+export default Survey;
