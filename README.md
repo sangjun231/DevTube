@@ -14,7 +14,7 @@
 
 ![Vercel](https://img.shields.io/badge/Vercel-000000.svg?style=for-the-badge&logo=Vercel&logoColor=white)
 
-🖇️ not depolyed
+🖇️ [DevTube](https://devtube-two.vercel.app/)
 
 ## Built With
 
