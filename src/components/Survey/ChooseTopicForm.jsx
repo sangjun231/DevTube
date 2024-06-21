@@ -30,7 +30,7 @@ const ChooseTopicForm = ({ answers, setAnswers, onNext, setStep, userId }) => {
     onSuccess: () => {
       onNext(answers);
     },
-    onError: (e) => {
+    onError: () => {
       toast.error('답변 제출에 실패했습니다. 다시 시도해 주세요.');
       navigate(0);
     }

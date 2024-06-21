@@ -8,10 +8,10 @@ import { updateUserNickname } from '../lib/supabase/userApi';
 
 const MyPage = () => {
   const [user, setUser] = useState(null);
+  const [nickname, setNickname] = useState('');
   const { data: videos, error: fetchError, isLoading } = useVideos();
   const deleteVideoMutation = useDeleteVideo();
   const { id } = useIdStore((state) => state);
-  const [nickname, setNickname] = useState('');
   const nicknameInput = useRef();
   const navigate = useNavigate();
 
